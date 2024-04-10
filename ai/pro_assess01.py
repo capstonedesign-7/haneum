@@ -11,7 +11,7 @@ def pronunciation_assessment_from_file(audio_path, text_to_read):
         See more information at https://aka.ms/csspeech/pa"""
 
 
-    speech_config = speechsdk.SpeechConfig(subscription="a8495ff907e94c0cb4a82ecd5434b58e", region="koreacentral")
+    speech_config = speechsdk.SpeechConfig(subscription="KEY", region="koreacentral")
     audio_config = speechsdk.audio.AudioConfig(filename=audio_path)
 
     reference_text = text_to_read
