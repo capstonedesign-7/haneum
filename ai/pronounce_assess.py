@@ -1,17 +1,15 @@
-import difflib
-import json
-import os
-import azure.cognitiveservices.speech as speechsdk
 import time
 import string
-from pydub import AudioSegment
+import json
+import difflib
+import azure.cognitiveservices.speech as speechsdk
 
 def pronunciation_assessment_from_file(audio_path, text_to_read):
     """Performs continuous pronunciation assessment asynchronously with input from an audio file.
         See more information at https://aka.ms/csspeech/pa"""
 
 
-    speech_config = speechsdk.SpeechConfig(subscription="KEY", region="koreacentral")
+    speech_config = speechsdk.SpeechConfig(subscription="API_KEY", region="koreacentral")
     audio_config = speechsdk.audio.AudioConfig(filename=audio_path)
 
     reference_text = text_to_read
@@ -33,7 +31,7 @@ def pronunciation_assessment_from_file(audio_path, text_to_read):
     durations = []
 
     def stop_cb(evt: speechsdk.SessionEventArgs):
-        """callback that signals to stop continuous recognition upon receiving an event `evt`"""
+        #callback that signals to stop continuous recognition upon receiving an event `evt`
         print('CLOSING on {}'.format(evt))
         nonlocal done
         done = True
@@ -41,7 +39,7 @@ def pronunciation_assessment_from_file(audio_path, text_to_read):
     def recognized(evt: speechsdk.SpeechRecognitionEventArgs):
         print('pronunciation assessment for: {}'.format(evt.result.text))
         pronunciation_result = speechsdk.PronunciationAssessmentResult(evt.result)
-        print('    Accuracy score: {}, pronunciation score: {}, completeness score : {}, fluency score: {}'.format(
+        print('Accuracy score: {}, pronunciation score: {}, completeness score : {}, fluency score: {}'.format(
             pronunciation_result.accuracy_score, pronunciation_result.pronunciation_score,
             pronunciation_result.completeness_score, pronunciation_result.fluency_score
         ))
@@ -57,7 +55,7 @@ def pronunciation_assessment_from_file(audio_path, text_to_read):
     speech_recognizer.recognized.connect(recognized)
     speech_recognizer.session_started.connect(lambda evt: print('SESSION STARTED: {}'.format(evt)))
     speech_recognizer.session_stopped.connect(lambda evt: print('SESSION STOPPED {}'.format(evt)))
-    speech_recognizer.canceled.connect(lambda evt: print('CANCELED {}'.format(evt)))
+    speech_recognizer.canceled.connect(lambda evt: print('CANCELED {}\n'.format(evt))) 
     # stop continuous recognition on either session stopped or canceled events
     speech_recognizer.session_stopped.connect(stop_cb)
     speech_recognizer.canceled.connect(stop_cb)
@@ -109,25 +107,23 @@ def pronunciation_assessment_from_file(audio_path, text_to_read):
     completeness_score = completeness_score if completeness_score <= 100 else 100
 
     pron_score = accuracy_score * 0.4 + fluency_score * 0.3 + completeness_score * 0.3
-
-    print('    Paragraph pronunciation score: {}, accuracy score: {}, completeness score: {}, fluency score: {}'.format(
-        pron_score, accuracy_score, completeness_score, fluency_score
+    total_score_dict = {'pron_score':pron_score, 'accuracy_score':accuracy_score,
+                  'completeness_score':completeness_score, 'fluency_score':fluency_score}
+    words_score_dict = {}
+    for idx, word in enumerate(final_words):
+        temp_list = []
+        temp_list.append(word.accuracy_score)
+        temp_list.append(word.error_type)
+        words_score_dict[str(word.word)]=temp_list
+    return {"status":"ok", "total_score":total_score_dict, "words_score":words_score_dict}
+    
+    """ REGACY
+    print('Paragraph pronunciation score: {}, accuracy score: {}, completeness score: {}, fluency score: {}'.format(
+    
     ))
 
     for idx, word in enumerate(final_words):
         print('    {}: word: {}\taccuracy score: {}\terror type: {};'.format(
             idx + 1, word.word, word.accuracy_score, word.error_type
-        ))
+        ))"""
 
-
-speechfile = "sample.m4a"
-rText = "내가 핸드폰으로 한 녹음"
-
-if speechfile.split('.')[1] != "wav":
-    sound = AudioSegment.from_file(speechfile)
-    speechfile = speechfile.split('.')[0]+".wav"
-    sound.export(speechfile, format="wav", bitrate="128k")
-    pronunciation_assessment_from_file(speechfile, rText)
-    os.remove(speechfile)
-else:
-    pronunciation_assessment_from_file(speechfile, rText)
