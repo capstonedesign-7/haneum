@@ -1,12 +1,15 @@
 package com.example.haneum;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +18,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 
 import java.io.File;
 import java.util.List;
@@ -112,5 +118,35 @@ public class MainActivity extends AppCompatActivity {
             startActivity(NewActivity);
         }
         return true;
+    }
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onBackPressed() {
+        ExitPopup();
+    }
+    private void ExitPopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.exit, null);
+        builder.setView(dialogView);
+
+        Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+        Button btnExit = dialogView.findViewById(R.id.btnExit);
+
+        final AlertDialog dialog = builder.create();
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        btnExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // 앱 종료
+            }
+        });
+
+        dialog.show();
     }
 }
