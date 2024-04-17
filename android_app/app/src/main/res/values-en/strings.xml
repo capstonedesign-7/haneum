@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Haneum</string>
+
+    <string-array name="setting_array">
+        <item>한국어-en</item>
+        <item>베트남어-en</item>
+    </string-array>
+    <string name="test_text">TEST</string>
+</resources>
