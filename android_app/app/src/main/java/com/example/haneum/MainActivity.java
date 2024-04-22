@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         */
-        //InputStream ins = getResources().openRawResource(getResources())
+
         /*     /texts/0 TEST - 단순 String 받아오기
         API_Interface api_interface = API_Client.getClient().create(API_Interface.class);
 
