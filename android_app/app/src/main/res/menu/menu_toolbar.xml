@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
     <item
         android:id="@+id/toolbar_setting"
         android:icon="@drawable/img_logo"
@@ -9,6 +11,11 @@
 
     <item
         android:id="@+id/toolbar_back"
+        android:icon="@drawable/img_logo"
         android:title="Back"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+
+
+
+        />
 </menu>
