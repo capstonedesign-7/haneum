@@ -17,7 +17,7 @@ public class API_Client {
         */
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://jsonplaceholder.typicode.com")
+                .baseUrl("http://192.168.0.8:8000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

@@ -5,6 +5,15 @@ import com.google.gson.annotations.SerializedName;
 /* Pronounce Assessement Class*/
 public class Pronounce_Class {
     /* Test code */
+
+    @SerializedName("text")
+    private String text;
+
+    public String getText(){
+        return text;
+    }
+
+    /*
     @SerializedName("userId")
     private  int userId;
 
@@ -48,6 +57,8 @@ public class Pronounce_Class {
     public void setId(int id){
         this.id = id;
     }
+    */
+
 
 
 }

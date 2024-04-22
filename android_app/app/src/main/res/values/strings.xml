@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">한음</string>
-
-    <string-array name="setting_array">
-        <item>한국어</item>
-        <item>베트남어</item>
-    </string-array>
+    <string name="kor">한국어</string>
+    <string name="eng">영어</string>
     <string name="test_text">테스트</string>
 </resources>

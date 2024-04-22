@@ -3,6 +3,7 @@ package com.example.haneum;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -23,6 +24,8 @@ import android.view.View;
 import android.widget.Button;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -52,8 +55,11 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled((false));
+
 
         /* API Test code */
+        /*
         API_Interface api_interface = API_Client.getClient().create(API_Interface.class);
 
         api_interface.getData("1").enqueue(new Callback<List<Pronounce_Class>>(){
@@ -73,9 +79,33 @@ public class MainActivity extends AppCompatActivity {
                 t.printStackTrace();
             }
         });
-        /*
+        */
+        //InputStream ins = getResources().openRawResource(getResources())
+        /*     /texts/0 TEST - 단순 String 받아오기
+        API_Interface api_interface = API_Client.getClient().create(API_Interface.class);
 
-        File file = new File("R.raw.test_audio"); // audio file path
+        api_interface.getText().enqueue(new Callback<String>(){
+            @Override
+            public void onResponse(Call<String> call, Response<String> response){
+                if(response.isSuccessful()){
+                    String data = response.body();
+                    Log.d("결과 : ", "성공");
+                    Log.d("값 : ", data);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t){
+                Log.d("결과 : ", "실패");
+
+                t.printStackTrace();
+            }
+        });
+        */
+
+
+       /*
+        File file = new File("file:///android_asset/test_audio.m4a"); // audio file path
         API_Interface api_interface2 = API_Client.getClient().create(API_Interface.class);
         RequestBody requestFile = RequestBody.create(MediaType.parse("audio/*"), file);
 
@@ -84,7 +114,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response){
                 if(response.isSuccessful()){
+                    String data = response.body().toString();
                     Log.d("결과 : ", "성공");
+                    Log.d("값",data);
                 }
             }
 
@@ -97,6 +129,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         */
+
+
+
     }
 
     @Override
