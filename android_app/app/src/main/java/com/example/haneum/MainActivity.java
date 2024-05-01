@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
         //EdgeToEdge.enable(this); // MainActivity color 안 바뀐 이유
         setContentView(R.layout.activity_main);
 
+
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -159,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         ExitPopup();
     }
+
     private void ExitPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
@@ -184,4 +187,11 @@ public class MainActivity extends AppCompatActivity {
 
         dialog.show();
     }
+
+    public void onButtonClick(View view) {
+        // 3단계 임시 이동
+        Intent intent = new Intent(this, Step3Activity.class);
+        startActivity(intent);
+    }
+
 }

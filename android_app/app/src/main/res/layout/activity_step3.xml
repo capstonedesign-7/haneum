@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="Step3Activity">
+
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/layout_toolbar" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="310dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/situ_rec"
+        android:gravity="center"
+        android:text="3단계 목표 설명"
+        android:textSize="21sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.088" />
+
+    <LinearLayout
+        android:id="@+id/box_layout1"
+        android:layout_width="310dp"
+        android:layout_height="135dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/situ_rec"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="4dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/ai_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="3dp"
+                android:src="@drawable/step3_ai_icon"/>
+
+            <TextView
+                android:id="@+id/box_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="텍스트"
+
+                android:textSize="18sp"
+                android:layout_gravity="center"
+                />
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/startbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="onButtonClick"
+            android:text="음성 재생 "
+            android:layout_marginTop="28dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/box_layout2"
+        android:layout_width="310dp"
+        android:layout_height="208dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/situ_rec"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/box_layout1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/user_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="3dp"
+                android:src="@drawable/step3_user_icon"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:text="사용자 음성 받아오기 가나다라마바사아자차카타파하"
+                android:textSize="18sp"/>
+
+
+
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="290dp"
+            android:layout_height="110dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/situ_rec"
+            android:paddingStart="20dp"
+            android:paddingTop="4dp"
+            android:text="FeedBack"
+            android:textSize="18sp"/>
+
+
+    </LinearLayout>
+
+    <ImageButton
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="40dp"
+        android:foreground="@drawable/step3_mic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
