@@ -6,12 +6,15 @@ import com.google.gson.annotations.SerializedName;
 public class Pronounce_Class {
     /* Test code */
 
+    /*
     @SerializedName("text")
     private String text;
 
     public String getText(){
         return text;
     }
+    */
+
 
     /*
     @SerializedName("userId")
