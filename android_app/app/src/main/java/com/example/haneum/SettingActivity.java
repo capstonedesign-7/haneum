@@ -116,6 +116,8 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     /* Toolbar Test */
+
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater menuInflater = getMenuInflater();
@@ -125,12 +127,12 @@ public class SettingActivity extends AppCompatActivity {
         item.setVisible(false);
 
         return true;
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
 
-        if (item.getItemId() == R.id.toolbar_back) {
+        if (item.getItemId() == android.R.id.home) {
             /*Intent NewActivity = new Intent(getApplicationContext(), SettingActivity.class);
             startActivity(NewActivity);*/
             finish();

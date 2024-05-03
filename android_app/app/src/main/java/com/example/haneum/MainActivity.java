@@ -1,10 +1,12 @@
 package com.example.haneum;
 
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,9 +14,11 @@ import android.view.MenuItem;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.ViewCompat;
@@ -23,10 +27,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
+
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
+
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -38,6 +42,10 @@ import retrofit2.Response;
 import retrofit2.http.Multipart;
 
 public class MainActivity extends AppCompatActivity {
+
+    String filepath;
+    String filename;
+    Button TopicBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        /* 권한 요청 */
+        ActivityCompat.requestPermissions(this , new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO},0);
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -103,20 +116,32 @@ public class MainActivity extends AppCompatActivity {
         });
         */
 
+        filename = "test_audio.m4a";
+        filepath = this.getCacheDir().getAbsolutePath();
+        filepath += "/" + filename;
 
-       /*
-        File file = new File("file:///android_asset/test_audio.m4a"); // audio file path
+        File file = new File(filepath); // audio file path
+
         API_Interface api_interface2 = API_Client.getClient().create(API_Interface.class);
-        RequestBody requestFile = RequestBody.create(MediaType.parse("audio/*"), file);
 
-        MultipartBody.Part body = MultipartBody.Part.createFormData("audio", file.getName(), requestFile);
-        api_interface2.upload(body).enqueue(new Callback<ResponseBody>(){
+        RequestBody requestFile = RequestBody.create(MediaType.parse("audio/*"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("audio_file", file.getName(), requestFile);
+
+        RequestBody requestFile2 = RequestBody.create(MediaType.parse("text/plain"), "1");
+
+        Log.d("시작","start");
+
+        api_interface2.update(body, requestFile2).enqueue(new Callback<ResponseBody>(){
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response){
                 if(response.isSuccessful()){
                     String data = response.body().toString();
                     Log.d("결과 : ", "성공");
-                    Log.d("값",data);
+                    try {
+                        Log.d("값", response.body().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
 
@@ -128,7 +153,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        */
+        Log.d("끝","end");
+
+        TopicBtn = findViewById(R.id.button1);
+        TopicBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent NewActivity = new Intent(getApplicationContext(), TopicActivity.class);
+                startActivity(NewActivity);
+            }
+        });
 
 
 
@@ -138,10 +172,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_toolbar, menu);
-
         /* Test Code */
-        MenuItem item = menu.findItem(R.id.toolbar_back);
+        /*
+        MenuItem item = menu.findItem(R.id.toolbar_setting);
         item.setVisible(false);
+        return true;*/
         return true;
     }
 
@@ -184,4 +219,5 @@ public class MainActivity extends AppCompatActivity {
 
         dialog.show();
     }
+
 }
