@@ -1,3 +1,4 @@
+import os
 import time
 import string
 import json
@@ -8,8 +9,10 @@ def pronunciation_assessment_from_file(audio_path, text_to_read):
     """Performs continuous pronunciation assessment asynchronously with input from an audio file.
         See more information at https://aka.ms/csspeech/pa"""
 
+    speech_key = os.environ["AZURE_API_KEY"]
+    service_region = "koreacentral"
 
-    speech_config = speechsdk.SpeechConfig(subscription="API_KEY", region="koreacentral")
+    speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
     audio_config = speechsdk.audio.AudioConfig(filename=audio_path)
 
     reference_text = text_to_read
