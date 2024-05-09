@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Haneum</string>
+    <string name="kor">Hàn ngữ</string>
+    <string name="vie">tiếng Việt</string>
+    <string name="lang_set">Thiết lập ngôn ngữ</string>
+    <string name="app_info">Thông tin ứng dụng</string>
+    <string name="test_text">Đây là câu kiểm tra.</string>
+</resources>

@@ -116,44 +116,7 @@ public class MainActivity extends AppCompatActivity {
         });
         */
 
-        filename = "test_audio.m4a";
-        filepath = this.getCacheDir().getAbsolutePath();
-        filepath += "/" + filename;
 
-        File file = new File(filepath); // audio file path
-
-        API_Interface api_interface2 = API_Client.getClient().create(API_Interface.class);
-
-        RequestBody requestFile = RequestBody.create(MediaType.parse("audio/*"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("audio_file", file.getName(), requestFile);
-
-        RequestBody requestFile2 = RequestBody.create(MediaType.parse("text/plain"), "1");
-
-        Log.d("시작","start");
-
-        api_interface2.update(body, requestFile2).enqueue(new Callback<ResponseBody>(){
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response){
-                if(response.isSuccessful()){
-                    String data = response.body().toString();
-                    Log.d("결과 : ", "성공");
-                    try {
-                        Log.d("값", response.body().string());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t){
-                Log.d("결과 : ", "실패");
-
-                t.printStackTrace();
-            }
-        });
-
-        Log.d("끝","end");
 
         TopicBtn = findViewById(R.id.button1);
         TopicBtn.setOnClickListener(new View.OnClickListener(){
@@ -176,7 +139,9 @@ public class MainActivity extends AppCompatActivity {
         /*
         MenuItem item = menu.findItem(R.id.toolbar_setting);
         item.setVisible(false);
-        return true;*/
+        return true;
+        */
+
         return true;
     }
 
