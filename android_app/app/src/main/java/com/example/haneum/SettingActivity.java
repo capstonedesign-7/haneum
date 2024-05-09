@@ -57,7 +57,7 @@ public class SettingActivity extends AppCompatActivity {
         if (locale_number == 0){
             lan = "ko";
         }else if(locale_number==1){
-            lan = "en";
+            lan = "vi";
         }else{
             lan = "ko";
         }
@@ -65,9 +65,16 @@ public class SettingActivity extends AppCompatActivity {
         TextView textView = findViewById(R.id.textView3);
         textView.setText(getStringByLocal(this,R.string.test_text, lan));
 
+        TextView textView1 = findViewById(R.id.textView);
+        textView1.setText(getStringByLocal(this, R.string.lang_set, lan));
+
+        TextView textView2 = findViewById(R.id.textView2);
+        textView2.setText(getStringByLocal(this, R.string.app_info, lan));
+
+
         ArrayList<String> locales = new ArrayList<>();
         locales.add(getStringByLocal(this, R.string.kor, lan));
-        locales.add(getStringByLocal(this, R.string.eng, lan));
+        locales.add(getStringByLocal(this, R.string.vie, lan));
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, locales);
 
@@ -103,15 +110,6 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-
-        /* Return Button */
-        ReturnBtn = findViewById(R.id.ReturnBtn);
-        ReturnBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                finish();
-            }
-        });
 
     }
 
