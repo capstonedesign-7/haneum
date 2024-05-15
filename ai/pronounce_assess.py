@@ -6,9 +6,6 @@ import difflib
 import azure.cognitiveservices.speech as speechsdk
 
 def pronunciation_assessment_from_file(audio_path, text_to_read):
-    """Performs continuous pronunciation assessment asynchronously with input from an audio file.
-        See more information at https://aka.ms/csspeech/pa"""
-
     speech_key = os.environ["AZURE_API_KEY"]
     service_region = "koreacentral"
 
@@ -115,18 +112,8 @@ def pronunciation_assessment_from_file(audio_path, text_to_read):
     words_score_dict = {}
     for idx, word in enumerate(final_words):
         temp_list = []
+        temp_list.append(str(word.word))
         temp_list.append(word.accuracy_score)
         temp_list.append(word.error_type)
-        words_score_dict[str(word.word)]=temp_list
+        words_score_dict[idx]=temp_list
     return {"status":"ok", "total_score":total_score_dict, "words_score":words_score_dict}
-    
-    """ REGACY
-    print('Paragraph pronunciation score: {}, accuracy score: {}, completeness score: {}, fluency score: {}'.format(
-    
-    ))
-
-    for idx, word in enumerate(final_words):
-        print('    {}: word: {}\taccuracy score: {}\terror type: {};'.format(
-            idx + 1, word.word, word.accuracy_score, word.error_type
-        ))"""
-
