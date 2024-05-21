@@ -119,7 +119,7 @@ public class StepOneActivity extends AppCompatActivity  implements View.OnClickL
                 /* */
                 //String filename = "test_audio.m4a";
 
-                String filename = "test-1.mp3";
+                String filename = "test-2.m4a";
                 filepath = this.getCacheDir().getAbsolutePath();
                 filepath += "/" + filename;
 

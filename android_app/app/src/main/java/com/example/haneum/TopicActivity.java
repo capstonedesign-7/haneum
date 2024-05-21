@@ -47,22 +47,14 @@ public class TopicActivity extends AppCompatActivity {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) { //pager가 만든 탭 숫자만큼 호출
                 //탭 이름 설정 하는 곳
-                tab.setText(tabTitle[position]);
+                //tab.setText(tabTitle[position]);
 
             }
         });
 
         mediator.attach();
+
     }
-
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_toolbar, menu);
-
-        return true;
-    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){

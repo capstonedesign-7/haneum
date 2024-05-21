@@ -3,6 +3,7 @@ package com.example.haneum;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import androidx.core.view.WindowInsetsCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 
 import java.io.File;
@@ -41,14 +43,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.http.Multipart;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     String filepath;
     String filename;
     Button TopicBtn;
+    LinearLayout situ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
 
         super.onCreate(savedInstanceState);
@@ -70,53 +74,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled((false));
 
-
-        /* API Test code */
+        situ = findViewById(R.id.situ_hos);
+        situ.setOnClickListener(this);
         /*
-        API_Interface api_interface = API_Client.getClient().create(API_Interface.class);
-
-        api_interface.getData("1").enqueue(new Callback<List<Pronounce_Class>>(){
-            @Override
-            public void onResponse(Call<List<Pronounce_Class>> call, Response<List<Pronounce_Class>> response){
-                if(response.isSuccessful()){
-                    List<Pronounce_Class> data = response.body();
-                    Log.d("결과 : ", "성공");
-                    Log.d("값 : ", data.get(0).getTitle());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Pronounce_Class>> call, Throwable t){
-                Log.d("결과 : ", "실패");
-
-                t.printStackTrace();
-            }
-        });
-        */
-
-        /*     /texts/0 TEST - 단순 String 받아오기
-        API_Interface api_interface = API_Client.getClient().create(API_Interface.class);
-
-        api_interface.getText().enqueue(new Callback<String>(){
-            @Override
-            public void onResponse(Call<String> call, Response<String> response){
-                if(response.isSuccessful()){
-                    String data = response.body();
-                    Log.d("결과 : ", "성공");
-                    Log.d("값 : ", data);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t){
-                Log.d("결과 : ", "실패");
-
-                t.printStackTrace();
-            }
-        });
-        */
-
-
 
         TopicBtn = findViewById(R.id.button1);
         TopicBtn.setOnClickListener(new View.OnClickListener(){
@@ -125,12 +85,23 @@ public class MainActivity extends AppCompatActivity {
                 Intent NewActivity = new Intent(getApplicationContext(), TopicActivity.class);
                 startActivity(NewActivity);
             }
-        });
+        }); */
+
+
 
 
 
     }
 
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+
+        if (id == R.id.situ_hos){
+            Intent NewActivity = new Intent(getApplicationContext(), TopicActivity.class);
+            startActivity(NewActivity);
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater menuInflater = getMenuInflater();
