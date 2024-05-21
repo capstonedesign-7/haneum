@@ -98,6 +98,7 @@
             android:background="@drawable/shape_round"
             android:text="2단계 목표 설명"/>
         <Button
+            android:id="@+id/step2_start"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"

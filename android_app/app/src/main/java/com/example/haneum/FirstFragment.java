@@ -21,7 +21,7 @@ import java.io.IOException;
 public class FirstFragment extends Fragment implements View.OnClickListener{
 
 
-    Button temp;
+    Button temp, temp2;
 
 
     public static FirstFragment singleton;
@@ -40,6 +40,9 @@ public class FirstFragment extends Fragment implements View.OnClickListener{
         temp = view.findViewById(R.id.button3);
         temp.setOnClickListener(this);
 
+        temp2 = view.findViewById(R.id.step2_start);
+        temp2.setOnClickListener(this);
+
         return view;
     }
 
@@ -50,6 +53,11 @@ public class FirstFragment extends Fragment implements View.OnClickListener{
         if(v == temp){
             Intent NewActivity = new Intent(getActivity().getApplicationContext(), StepOneActivity.class);
             startActivity(NewActivity);
+            Log.d("temp", "temp start");
+        }else if ( v == temp2){
+            Intent NewActivity = new Intent(getActivity().getApplicationContext(), StepTwoActivity.class);
+            startActivity(NewActivity);
+            Log.d("temp2", "temp2 start");
         }
     }
 }

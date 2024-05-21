@@ -4,12 +4,13 @@
 
     <solid android:color="#FFFFFF"/>
     <corners android:radius="20dp"/>
-    <stroke
-        android:elevation="4dp"
-        android:width="2dp"
-        android:color="#D4D4D4"/>
     <padding
         android:bottom="3dp"
         android:left="3dp"
         android:right="3dp"/>
 </shape>
+
+<!-- <stroke
+        android:elevation="4dp"
+        android:width="2dp"
+        android:color="#D4D4D4"/> -->
