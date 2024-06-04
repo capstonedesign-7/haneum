@@ -3,20 +3,15 @@ package com.example.haneum;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -31,23 +26,16 @@ import android.widget.LinearLayout;
 
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.http.Multipart;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    String filepath;
-    String filename;
-    Button TopicBtn;
     LinearLayout situ;
 
     @Override
@@ -76,19 +64,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         situ = findViewById(R.id.situ_hos);
         situ.setOnClickListener(this);
-        /*
-
-        TopicBtn = findViewById(R.id.button1);
-        TopicBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Intent NewActivity = new Intent(getApplicationContext(), TopicActivity.class);
-                startActivity(NewActivity);
-            }
-        }); */
-
-
-
 
 
     }
@@ -106,13 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_toolbar, menu);
-        /* Test Code */
-        /*
-        MenuItem item = menu.findItem(R.id.toolbar_setting);
-        item.setVisible(false);
-        return true;
-        */
-
+        menu.getItem(1).setVisible(false); //
         return true;
     }
 
@@ -125,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         return true;
     }
+
     @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
@@ -133,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void ExitPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.exit, null);
+        View dialogView = inflater.inflate(R.layout.layout_exit, null);
         builder.setView(dialogView);
 
         Button btnCancel = dialogView.findViewById(R.id.btnCancel);
@@ -155,5 +125,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         dialog.show();
     }
+
 
 }

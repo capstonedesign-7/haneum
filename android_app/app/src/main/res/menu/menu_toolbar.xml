@@ -8,4 +8,10 @@
         android:title="Setting"
         app:showAsAction="always" />
 
+    <item
+        android:id = "@+id/toolbar_exit"
+        android:icon="@drawable/img_logo"
+        android:title="Exit"
+        app:showAsAction="always"/>
+
 </menu>
