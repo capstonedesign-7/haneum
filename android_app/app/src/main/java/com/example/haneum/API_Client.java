@@ -4,14 +4,16 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+
+
 /* API Client */
 public class API_Client {
 
     private static Retrofit retrofit = null;
 
     static Retrofit getClient() {
-        /*
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+
+        /*HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
         */

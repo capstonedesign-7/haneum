@@ -52,7 +52,7 @@
                 android:src="@drawable/step3_ai_icon"/>
 
             <TextView
-                android:id="@+id/box_text"
+                android:id="@+id/AItext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -66,7 +66,7 @@
 
 
         <Button
-            android:id="@+id/startbutton"
+            android:id="@+id/playbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -104,20 +104,21 @@
                 android:layout_marginTop="3dp"
                 android:layout_marginStart="3dp"
                 android:src="@drawable/step3_user_icon"/>
+
             <TextView
+                android:id="@+id/Userstt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
-                android:text="사용자 음성 받아오기 가나다라마바사아자차카타파하"
-                android:textSize="18sp"/>
-
-
+                android:text="사용자 음성 받아오기 "
+                android:textSize="18sp" />
 
 
         </LinearLayout>
 
         <TextView
+            android:id="@+id/scoreTextView"
             android:layout_width="290dp"
             android:layout_height="110dp"
             android:layout_marginTop="10dp"
@@ -125,12 +126,13 @@
             android:paddingStart="20dp"
             android:paddingTop="4dp"
             android:text="FeedBack"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
 
 
     </LinearLayout>
 
-    <ImageButton
+    <Button
+        android:id="@+id/RecordButton"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginBottom="40dp"
