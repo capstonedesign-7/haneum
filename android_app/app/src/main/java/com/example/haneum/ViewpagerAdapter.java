@@ -23,7 +23,7 @@ public class ViewpagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return fragments[position]; //position 은 현재 만들어야할 index번호
+        return fragments[position]; //position 은 현재 만들어야 할 index번호
     }
 
     @Override

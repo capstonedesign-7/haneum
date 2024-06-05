@@ -16,14 +16,14 @@
         android:id="@+id/situation"
         android:layout_width="50dp"
         android:layout_height="30dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/textview_highlight"
 
         android:gravity="center"
         android:text="상황"
         android:textColor="#000000"
-        android:textSize="15dp"
+        android:textSize="17dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/line"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,14 +55,20 @@
                     layout="@layout/layout_situation"
                     android:layout_width="0dp"
                     android:layout_height="120dp"
-                    android:layout_margin="10dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_columnWeight="1" />
 
                 <include
-                    layout="@layout/layout_situation"
+                    layout="@layout/layout_situationtemp"
                     android:layout_width="0dp"
                     android:layout_height="120dp"
-                    android:layout_margin="10dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_columnWeight="1" />
 
             </GridLayout>

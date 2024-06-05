@@ -88,7 +88,7 @@ public class StepTwoActivity extends AppCompatActivity implements View.OnClickLi
         if (item.getItemId() == R.id.toolbar_exit) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             LayoutInflater inflater = getLayoutInflater();
-            View dialogView = inflater.inflate(R.layout.layout_popup, null);
+            View dialogView = inflater.inflate(R.layout.layout_exit, null);
             builder.setView(dialogView);
 
             Button btnCancel = dialogView.findViewById(R.id.btnCancel);
