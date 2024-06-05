@@ -122,12 +122,12 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="종합 점수 :"/>
+                android:text="종합 점수 :  "/>
             <TextView
                 android:id="@+id/v_pron_score"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />
 
