@@ -1,43 +1,37 @@
 package com.example.haneum;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 public class StepOneActivity extends AppCompatActivity  implements View.OnClickListener{
 
-    Button btnstart, btnstop;
-    MediaRecorder mediaRecorder;
-    String filepath, filepath2;
-    String testString;
-    LinearLayout listView;
+    String filepath;
+    RecyclerView vieee;
+    StepOneTwoAdapter adapterr;
+    ArrayList item;
 
-    JSONObject jObject;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,233 +42,94 @@ public class StepOneActivity extends AppCompatActivity  implements View.OnClickL
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled((false));
 
-        btnstart = findViewById(R.id.button5);
-        btnstop = findViewById(R.id.button6);
-
-        btnstart.setOnClickListener(this);
-        btnstop.setOnClickListener(this);
 
 
-        filepath2 = getCacheDir().getAbsolutePath();
-        filepath2 += "/audiorecordtest2.mp3";
-        Log.d("filepath",filepath2);
+        filepath = getCacheDir().getAbsolutePath();
 
+        vieee = (RecyclerView) findViewById(R.id.stepone_list);
+        vieee.setItemViewCacheSize(20); // 캐시 사이즈 크게 설정해서 재사용 막음..
+        adapterr = new StepOneTwoAdapter();
+        //adapter = new StepOneTwoAdapter();
+
+        vieee.setAdapter(adapterr);
+        vieee.setLayoutManager(new LinearLayoutManager(this));
+
+        /* adapt data */
+        item = new ArrayList<>();
+
+
+        item.add(new StepOneTwo_Class("1","1","코가막히고 목이 따끔거리고 기침이 나요", "step1_1_audio.mp3",filepath+"/step1_1_record"));
+        item.add(new StepOneTwo_Class("1","2","언제쯤 나아서 학교에 갈 수 있나요?", "step1_2_audio.mp3",filepath+"/step1_2_record"));
+        item.add(new StepOneTwo_Class("1","3","전에도 갑자기 아팠던 적이 있어요.", "step1_3_audio.mp3",filepath+"/step1_3_record"));
+        item.add(new StepOneTwo_Class("1","4","발목이 시큰거리고 빨갛게 부었어요.", "step1_4_audio.mp3",filepath+"/step1_4_record"));
+        item.add(new StepOneTwo_Class("1","5","눈이 건조하고 자주 충혈되는 것 같아요.", "step1_5_audio.mp3",filepath+"/step1_5_record"));
+        item.add(new StepOneTwo_Class("1","6","약은 매일 식후 삼십 분 후에 드세요.", "step1_6_audio.mp3",filepath+"/step1_6_record"));
+        item.add(new StepOneTwo_Class("1","7","치아 스케일링을 하러 왔어요.", "step1_7_audio.mp3",filepath+"/step1_7_record"));
+        item.add(new StepOneTwo_Class("1","8","어제 저녁부터 머리가 울리고 열이 나요", "step1_8_audio.mp3",filepath+"/step1_8_record"));
+        item.add(new StepOneTwo_Class("1","9","땀이 날 정도로 운동을 하면 안됩니다.", "step1_9_audio.mp3",filepath+"/step1_9_record"));
+        item.add(new StepOneTwo_Class("1","10","영양제나 비타민을 먹어도 되나요?", "step1_10_audio.mp3",filepath+"/step1_10_record"));
+
+
+        adapterr.setItemList(item);
 
 
     }
     public void onClick(View v){
-        if(v == btnstart){
-            Log.d("성공", "hi2");
-            mediaRecorder = new MediaRecorder();
-            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-            mediaRecorder.setOutputFile(filepath2);
-
-            /* test */
-            /*
-            listView = findViewById(R.id.linearLayout3);
-
-            for (int i = 0; i< 2; i++){
-                String t = Integer.toString(i);
-                TextView textViewT = new TextView(getApplicationContext());
-                textViewT.setText("단어" + t + " : ");
-                TextView textViewT1 = new TextView(getApplicationContext());
-                textViewT1.setText("점수" + t + " : ");
-                TextView textViewT2 = new TextView(getApplicationContext());
-                textViewT2.setText("타입" + t + " : ");
-                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                param.leftMargin = 20;
-
-                textViewT.setLayoutParams(param);
-                listView.addView(textViewT);
-                textViewT1.setLayoutParams(param);
-                listView.addView(textViewT1);
-                textViewT2.setLayoutParams(param);
-                listView.addView(textViewT2);
-
-
-            }
-            */
-
-
-            try {
-                mediaRecorder.prepare();
-                mediaRecorder.start();
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-
-        }
-        else if(v == btnstop){
-            Log.d("성공", "hi3");
-            if(mediaRecorder == null){
-                return;
-            }
-            else {
-                mediaRecorder.stop();
-                mediaRecorder.release();
-                mediaRecorder=null;
-
-                /* */
-                //String filename = "test_audio.m4a";
-
-                String filename = "test-2.m4a";
-                filepath = this.getCacheDir().getAbsolutePath();
-                filepath += "/" + filename;
-
-                File file = new File(filepath); // audio file path
-
-                API_Interface api_interface2 = API_Client.getClient().create(API_Interface.class);
-
-                RequestBody requestFile = RequestBody.create(MediaType.parse("audio/*"), file);
-                MultipartBody.Part body = MultipartBody.Part.createFormData("audio_file", file.getName(), requestFile);
-
-                RequestBody requestFile2 = RequestBody.create(MediaType.parse("text/plain"), "2");
-
-                Log.d("시작","start");
-
-                api_interface2.update(body, requestFile2).enqueue(new Callback<ResponseBody>(){
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response){
-                        if(response.isSuccessful()){
-                            String data = null;
-
-
-                            try {
-                                data = response.body().string();
-                                Log.d("data", data);
-
-                                Log.d("결과 : ", "성공");
-                                Log.d("값", data);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-
-
-                            try {
-                                jObject = new JSONObject(data);
-                                String jStatus = jObject.getString("status");
-                                Log.d("jStatus", jStatus.toString());
-
-                                JSONObject jTotalScore = jObject.getJSONObject("total_score");
-                                String jPronScore = jTotalScore.getString("pron_score");
-                                String jAccurScore = jTotalScore.getString("accuracy_score");
-                                String jCompleScore = jTotalScore.getString("completeness_score");
-                                String jFluScore = jTotalScore.getString("fluency_score");
-
-                                TextView ttt1 = findViewById(R.id.textView7);
-                                ttt1.setText(jPronScore);
-                                TextView ttt2 = findViewById(R.id.textView10);
-                                ttt2.setText(jAccurScore);
-                                TextView ttt3 = findViewById(R.id.textView12);
-                                ttt3.setText(jCompleScore);
-                                TextView ttt4 = findViewById(R.id.textView14);
-                                ttt4.setText(jFluScore);
-
-                                JSONObject jWordsScore = jObject.getJSONObject("words_score");
-                                int leng = jWordsScore.length();
-                                listView = findViewById(R.id.linearLayout3);
-
-                                for (int i = 0; i < leng; i++){
-                                    String t = Integer.toString(i);
-                                    String aaa = jWordsScore.getString(t);
-                                    String[] strArr = aaa.split("\\[|,|\\]");
-                                    Log.d("aaa", strArr[0]); // 빈공간 출력
-                                    Log.d("bbb", strArr[1]);
-                                    Log.d("ccc", strArr[2]);
-                                    Log.d("ddd",strArr[3]);
-                                    // 동적 레이아웃 추가
-
-                                    TextView textViewT = new TextView(getApplicationContext());
-                                    textViewT.setText("단어" + t + " : " + strArr[1]);
-                                    TextView textViewT1 = new TextView(getApplicationContext());
-                                    textViewT1.setText("점수" + t + " : " + strArr[2]);
-                                    TextView textViewT2 = new TextView(getApplicationContext());
-                                    textViewT2.setText("타입" + t + " : " + strArr[3]);
-                                    LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                                    param.leftMargin = 20;
-
-                                    textViewT.setLayoutParams(param);
-                                    listView.addView(textViewT);
-                                    textViewT1.setLayoutParams(param);
-                                    listView.addView(textViewT1);
-                                    textViewT2.setLayoutParams(param);
-                                    listView.addView(textViewT2);
-                                }
-
-
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t){
-                        Log.d("결과 : ", "실패");
-
-                        t.printStackTrace();
-                    }
-                });
-
-                /*
-                testString =
-                        "{"
-                        + "\"status\":\"ok\","
-                        + "\"total_score\":"
-                        + "{"
-                        + "\"pron_score\":98.56, \"accuracy_score\":96.4, \"completeness_score\":100.0, \"fluency_score\":100.0"
-                        + "},"
-                        + "\"words_score\":"
-                        + "{"
-                        + "\"김서방네\" : [100.0,\"None\"], \"지붕위에\":[100.0,\"None\"], \"콩깍지가\":[100.0,\"None\"], \"깐\":[100.0,\"None\"], \"콩깍지냐\":[82.0,\"None\"]"
-                        + "}}";
-
-                Log.d("끝","end");
-                Log.d("testText", testString);
-
-                try {
-                    jObject = new JSONObject(testString);
-
-                    String jStatus = jObject.getString("status");
-                    Log.d("jStatus", jStatus.toString());
-
-                    JSONObject jTotalScore = jObject.getJSONObject("total_score");
-                    String jPronScore = jTotalScore.getString("pron_score");
-                    String jAccurScore = jTotalScore.getString("accuracy_score");
-                    String jCompleScore = jTotalScore.getString("completeness_score");
-                    String jFluScore = jTotalScore.getString("fluency_score");
-
-
-                    JSONObject jWordsScore = jObject.getJSONObject("words_score");
-                    String aaa = jWordsScore.getString("김서방네");
-                    String[] strArr = aaa.split("\\[|,|\\]");
-
-                    Log.d("aaa", strArr[0]);
-                    Log.d("bbb", strArr[1]);
-                    Log.d("ccc", strArr[2]);
-
-                    TextView ttt1 = findViewById(R.id.textView7);
-                    ttt1.setText(jPronScore);
-
-                    TextView ttt2 = findViewById(R.id.textView10);
-                    ttt2.setText(jAccurScore);
-                    TextView ttt3 = findViewById(R.id.textView12);
-                    ttt3.setText(jCompleScore);
-                    TextView ttt4 = findViewById(R.id.textView14);
-                    ttt4.setText(jFluScore);
-
-
-
-
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }*/
-
-            }
-        }
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_toolbar, menu);
+        menu.getItem(0).setVisible(false);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        if (item.getItemId() == R.id.toolbar_exit) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.layout_exit, null);
+            builder.setView(dialogView);
+
+            Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+            Button btnExit = dialogView.findViewById(R.id.btnExit);
+
+            final AlertDialog dialog = builder.create();
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            btnExit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    // 캐시 지우기
+                    File[] directory = getCacheDir().listFiles();
+                    if(directory != null){
+                        for (File file : directory ){
+                            file.delete();
+                        }
+                    }
+                    SharedPreferences sharedPreferences = getSharedPreferences("step1_sum", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt("step1_sum", 0);
+                    editor.commit();
+                    dialog.dismiss();
+                    finish(); // 액티비티 종료
+                }
+            });
+
+            dialog.show();
+            // 여기서 팝업 띄우기
+
+        }
+        return true;
+    }
+
 }
