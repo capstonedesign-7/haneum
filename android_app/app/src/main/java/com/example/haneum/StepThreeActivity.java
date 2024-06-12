@@ -10,7 +10,7 @@ import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.Button;
 import android.util.Log;
-import androidx.activity.EdgeToEdge;
+
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.AlertDialog;
@@ -48,7 +48,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 
-public class Step3Activity extends AppCompatActivity implements View.OnClickListener {
+public class StepThreeActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button RecordButton;
     MediaRecorder mediaRecorder;
@@ -84,7 +84,7 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
         put("situation2", Arrays.asList("밥을 잘 먹고있는지 말하기", "나의 알레르기에 대해 말하기", "내가 지금 먹고있는 약이 있는지 말하기"));
     }};
 
-    public Step3Activity() {
+    public StepThreeActivity() {
     }
 
 
@@ -146,7 +146,7 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
                             lock = 1;
                         }
                     }else{
-                        Toast.makeText(Step3Activity.this, "최신 오디오 파일이 준비되지 않았습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(StepThreeActivity.this, "최신 오디오 파일이 준비되지 않았습니다.", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -409,7 +409,7 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
-                Intent intent = new Intent(Step3Activity.this, MainActivity.class);
+                Intent intent = new Intent(StepThreeActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
