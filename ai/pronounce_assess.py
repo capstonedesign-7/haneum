@@ -15,7 +15,6 @@ def pronunciation_assessment_from_file(audio_path, text_to_read):
     reference_text = text_to_read
 
     enable_miscue = True
-    enable_prosody_assessment = False
     pronunciation_config = speechsdk.PronunciationAssessmentConfig(
         reference_text=reference_text,
         grading_system=speechsdk.PronunciationAssessmentGradingSystem.HundredMark,
@@ -32,12 +31,12 @@ def pronunciation_assessment_from_file(audio_path, text_to_read):
 
     def stop_cb(evt: speechsdk.SessionEventArgs):
         #callback that signals to stop continuous recognition upon receiving an event `evt`
-        print('CLOSING on {}'.format(evt))
+        #print('CLOSING on {}'.format(evt))
         nonlocal done
         done = True
 
     def recognized(evt: speechsdk.SpeechRecognitionEventArgs):
-        print('pronunciation assessment for: {}'.format(evt.result.text))
+        #print('pronunciation assessment for: {}'.format(evt.result.text))
         pronunciation_result = speechsdk.PronunciationAssessmentResult(evt.result)
         print('Accuracy score: {}, pronunciation score: {}, completeness score : {}, fluency score: {}'.format(
             pronunciation_result.accuracy_score, pronunciation_result.pronunciation_score,
@@ -109,11 +108,11 @@ def pronunciation_assessment_from_file(audio_path, text_to_read):
     pron_score = accuracy_score * 0.4 + fluency_score * 0.3 + completeness_score * 0.3
     total_score_dict = {'pron_score':pron_score, 'accuracy_score':accuracy_score,
                   'completeness_score':completeness_score, 'fluency_score':fluency_score}
-    words_score_dict = {}
+    words_score_list = []
     for idx, word in enumerate(final_words):
-        temp_list = []
-        temp_list.append(str(word.word))
-        temp_list.append(word.accuracy_score)
-        temp_list.append(word.error_type)
-        words_score_dict[idx]=temp_list
-    return {"status":"ok", "total_score":total_score_dict, "words_score":words_score_dict}
+        temp_dict = {}
+        temp_dict["word"] = str(word.word)
+        temp_dict["score"] = int(word.accuracy_score)
+        temp_dict["type"] = str(word.error_type)
+        words_score_list.append(temp_dict)
+    return {"status":"ok", "total_score":total_score_dict, "words_score":words_score_list}
