@@ -21,6 +21,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/step3_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -30,9 +31,25 @@
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="3단계. 롤플레잉"/>
+            />
+
+
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/l_topic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="5dp"
+            android:textColor="#000000"
+            android:textSize="15sp" />
+
+
+
+
+        <TextView
+            android:id="@+id/goal1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -43,7 +60,7 @@
             android:background="@drawable/shape_round"
             android:text="3단계 목표"/>
         <Button
-            android:id="@+id/startbutton1"
+            android:id="@+id/step3_start_1"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginLeft="15dp"
@@ -55,8 +72,20 @@
             android:minWidth="0dp"
             android:text="상황 1" />
 
+        <TextView
+            android:id="@+id/goal2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="5dp"
+            android:padding="10dp"
+            android:background="@drawable/shape_round"
+            android:text="3단계 목표"/>
+
         <Button
-            android:id="@+id/startbutton2"
+            android:id="@+id/step3_start_2"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginLeft="15dp"

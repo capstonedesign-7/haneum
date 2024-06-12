@@ -4,6 +4,7 @@ package com.example.haneum;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -22,7 +23,9 @@ import androidx.core.view.WindowInsetsCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 
 import java.io.File;
@@ -37,7 +40,13 @@ import okhttp3.ResponseBody;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     LinearLayout situ;
+    String language;
+    SharedPreferences sharedPreferences;
+    int step1_state, step2_state, step3_state;
 
+    ImageView step1_i;
+    ImageView step2_i;
+    ImageView step3_i;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -62,8 +71,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled((false));
 
-        situ = findViewById(R.id.situ_hos);
-        situ.setOnClickListener(this);
+        TextView situation = findViewById(R.id.situation);
+        LanguageSet languageSet = new LanguageSet();
+        language = languageSet.getLanguage(this);
+
+        situation.setText(languageSet.getStringLocal(this, R.string.situation, language));
+
+        TextView temp = findViewById(R.id.temp);
+        temp.setText(languageSet.getStringLocal(this, R.string.later, language));
+
+        //situ = findViewById(R.id.situ_hos);
+        //situ.setOnClickListener(this);
+
+
+
+        LinearLayout hospital = findViewById(R.id.l_hospital);
+        hospital.setOnClickListener(this);
+
+        ImageView hos_image = hospital.findViewById(R.id.situation_image);
+        TextView hos_name = hospital.findViewById(R.id.situation_name);
+        TextView hos_step1 = hospital.findViewById(R.id.step1);
+        TextView hos_step2 = hospital.findViewById(R.id.step2);
+        TextView hos_step3 = hospital.findViewById(R.id.step3);
+
+        step1_i = hospital.findViewById(R.id.i_step1);
+        step2_i = hospital.findViewById(R.id.i_step2);
+        step3_i = hospital.findViewById(R.id.i_step3);
+
+        sharedPreferences = getSharedPreferences("step", MODE_PRIVATE);
+
+
+
+        hos_image.setImageResource(R.drawable.hospital);
+        hos_name.setText(languageSet.getStringLocal(this, R.string.hospital, language));
+        hos_step1.setText(languageSet.getStringLocal(this, R.string.step1, language));
+        hos_step2.setText(languageSet.getStringLocal(this, R.string.step2, language));
+        hos_step3.setText(languageSet.getStringLocal(this, R.string.step3, language));
+
 
 
     }
@@ -72,11 +116,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         int id = v.getId();
 
-        if (id == R.id.situ_hos){
-            Intent NewActivity = new Intent(getApplicationContext(), TopicActivity.class);
-            startActivity(NewActivity);
+        if (id == R.id.l_hospital){
+            Intent intent = new Intent(getApplicationContext(), TopicActivity.class);
+            intent.putExtra("situation", "hospital");
+            startActivity(intent);
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(sharedPreferences.contains("hospital_step1_comple")){
+            step1_state = sharedPreferences.getInt("hospital_step1_comple", 0);
+        }else{
+            step1_state = 0;
+        }
+
+        if(sharedPreferences.contains("hospital_step2_comple")){
+            step2_state = sharedPreferences.getInt("hospital_step2_comple", 0);
+        }else{
+            step2_state = 0;
+        }
+
+        if(sharedPreferences.contains("hospital_step3_comple")){
+            step3_state = sharedPreferences.getInt("hospital_step3_comple", 0);
+        }else{
+            step3_state = 0;
+        }
+
+        if(step1_state == 1){
+            step1_i.setImageResource(R.drawable.blue_circle);
+        }else {
+            step1_i.setImageResource(R.drawable.red_circle);
+        }
+
+        if(step2_state == 1){
+            step2_i.setImageResource(R.drawable.blue_circle);
+        }else {
+            step2_i.setImageResource(R.drawable.red_circle);
+        }
+
+        if(step3_state == 2){
+            step3_i.setImageResource(R.drawable.blue_circle);
+        }else {
+            step3_i.setImageResource(R.drawable.red_circle);
+        }
+
+
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater menuInflater = getMenuInflater();

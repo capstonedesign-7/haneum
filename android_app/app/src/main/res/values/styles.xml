@@ -5,4 +5,5 @@
         <item name="windowSplashScreenBackground">@color/white</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/img_logo</item>
     </style>
+
 </resources>

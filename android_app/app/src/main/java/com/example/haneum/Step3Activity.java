@@ -4,6 +4,7 @@ import java.util.Random;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.media.MediaPlayer;
 import android.view.View;
@@ -46,8 +47,6 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.example.haneum.StepThreeMessage;
-
 
 public class Step3Activity extends AppCompatActivity implements View.OnClickListener {
 
@@ -57,9 +56,11 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
     String filepath;
     boolean isRecording = false;
     boolean isPlaying = false;
-    TextView scoreTextView;
+    //TextView scoreTextView;
     TextView AITextView;
     TextView USERsttTextView;
+    TextView v_accuracy, v_comple, v_fluency;
+    TextView accu, comple, flu;
     Button playButton;
     Random rand;
     private int ttsaudioindex = 0;
@@ -71,16 +72,11 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
     private StepThreeAdapter adapter;
     private List<StepThreeMessage> messageList;
 
+    SharedPreferences sharedPreferences;
     int lock = 1;
-
-
-
-
-
-
-
-
-
+    int comple_state, role_state;
+    String getSituation, getTopic;
+    String language;
     API_Interface api_interface;
 
     private static final Map<String, List<String>> roleplayToGoalMap = new HashMap<String, List<String>>() {{
@@ -96,20 +92,43 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_step3);
+        //EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_stepthree);
 
         Intent intent = getIntent();
         roleplay = intent.getStringExtra("roleplay");
+        getSituation = intent.getStringExtra("situation");
+        getTopic = intent.getStringExtra("topic");
+
+        sharedPreferences =  getSharedPreferences("step", MODE_PRIVATE);
+
+        v_comple = findViewById(R.id.v_comple_score);
+        v_fluency = findViewById(R.id.v_fluency_score);
+        v_accuracy = findViewById(R.id.v_accuracy_score);
+
+        accu = findViewById(R.id.accuracy);
+        comple = findViewById(R.id.completeness);
+        flu = findViewById(R.id.fluency);
+
+        LanguageSet languageSet = new LanguageSet();
+        language = languageSet.getLanguage(this);
+
+        accu.setText(languageSet.getStringLocal(this, R.string.accuracy, language));
+        comple.setText(languageSet.getStringLocal(this, R.string.completeness, language));
+        flu.setText(languageSet.getStringLocal(this, R.string.fluency, language));
+
         Log.d("roleplay", roleplay);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled((false));
 
         RecordButton = findViewById(R.id.RecordButton);
         RecordButton.setOnClickListener(this);
 
-        scoreTextView = findViewById(R.id.scoreTextView);
+        //scoreTextView = findViewById(R.id.scoreTextView);
         AITextView = findViewById(R.id.AItext);
+        AITextView.setText(languageSet.getStringLocal(this, R.string.step3_ai_start, language));
         USERsttTextView = findViewById(R.id.Userstt);
 
         playButton = findViewById(R.id.playbutton); // Add play button in your XML and find it here
@@ -171,8 +190,6 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
         filepath = getCacheDir().getAbsolutePath() + "/" +time +".mp3";
         Log.d("filepath", filepath);
 
-
-
         mediaRecorder = new MediaRecorder();
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
@@ -215,8 +232,6 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
         }
 
 
-
-
         RequestBody requestFile = RequestBody.create(MediaType.parse("audio/*"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("audio_file", file.getName(), requestFile);
         Log.d("파일 업로드", "파일 이름: " + file.getName());
@@ -246,12 +261,20 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
                         String jAccurScore = jTotalScore.getString("accuracy_score");
                         String jCompleScore = jTotalScore.getString("completeness_score");
                         String jFluScore = jTotalScore.getString("fluency_score");
+                        Double a = Math.round(Double.parseDouble(jAccurScore)*100)/100.0;
+                        Double b = Math.round(Double.parseDouble(jCompleScore)*100)/100.0;
+                        Double c = Math.round(Double.parseDouble(jFluScore)*100)/100.0;
 
+                        /*
                         String scoreText = "정확도: " + jAccurScore + "\n" +
                                 "완성도: " + jCompleScore + "\n" +
                                 "유창성: " + jFluScore + "\n";
+                        */
+                        v_accuracy.setText(Double.toString(a));
+                        v_comple.setText(Double.toString(b));
+                        v_fluency.setText(Double.toString(c));
 
-                        scoreTextView.setText(scoreText);
+                        //scoreTextView.setText(scoreText);
 
                         String aiResponse = jObject.getString("ai_response");
                         JSONObject aiResponseObject = new JSONObject(aiResponse);
@@ -266,7 +289,6 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
                         addMessage(content, false);
 
                         Log.d("TTS", content);
-
 
                         USERsttTextView.setText(sttResult);
 
@@ -323,6 +345,28 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
                         }
 
                         if (allGoalsAchieved) {
+                            String step3_role = getSituation+"_"+getTopic+"_step3_"+roleplay;
+                            String step3_comple = getSituation+"_step3_comple";
+
+                            if(sharedPreferences.contains(step3_role)){
+                                role_state = sharedPreferences.getInt(step3_role, 0);
+                            }else{
+                                role_state = 0;
+                            }
+
+                            if(sharedPreferences.contains(step3_comple)){
+                                comple_state = sharedPreferences.getInt(step3_comple, 0);
+                            }else{
+                                comple_state = 0;
+                            }
+
+                            if ( role_state == 0){
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putInt(step3_role, 1);
+                                editor.putInt(step3_comple, comple_state + 1);
+                                editor.commit();
+                            }
+
                             showPopup();
                         }
 
@@ -350,7 +394,8 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
 
     private void showPopup() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        View popupView = inflater.inflate(R.layout.layout__complete, null);
+
+        View popupView = inflater.inflate(R.layout.layout_complete, null);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(popupView);
