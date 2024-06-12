@@ -26,10 +26,13 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.widget.Toast;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.media.MediaRecorder;
-import android.widget.TextView;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -42,6 +45,8 @@ import retrofit2.Response;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import com.example.haneum.StepThreeMessage;
 
 
 public class Step3Activity extends AppCompatActivity implements View.OnClickListener {
@@ -57,11 +62,18 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
     TextView USERsttTextView;
     Button playButton;
     Random rand;
-
-
+    private int ttsaudioindex = 0;
     private String historyMsg = " ";
 
     private String roleplay;
+
+    private RecyclerView recyclerView;
+    private StepThreeAdapter adapter;
+    private List<StepThreeMessage> messageList;
+
+    int lock = 1;
+
+
 
 
 
@@ -76,7 +88,8 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
         put("situation2", Arrays.asList("밥을 잘 먹고있는지 말하기", "나의 알레르기에 대해 말하기", "내가 지금 먹고있는 약이 있는지 말하기"));
     }};
 
-
+    public Step3Activity() {
+    }
 
 
     @SuppressLint("WrongViewCast")
@@ -106,7 +119,16 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
                 if (isPlaying) {
                     stopPlaying();
                 } else {
-                    startPlaying();
+                    if (lock == 0) {
+                        String currentfilename = "tts_audio" + ttsaudioindex + ".mp3";
+                        File ttsfile = new File(getCacheDir(), currentfilename);
+                        if (ttsfile.exists() && ttsfile.getName().equals(currentfilename)) {
+                            startPlaying(ttsfile.getAbsolutePath());
+                            lock = 1;
+                        }
+                    }else{
+                        Toast.makeText(Step3Activity.this, "최신 오디오 파일이 준비되지 않았습니다.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -114,6 +136,12 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
         rand = new Random();
 
         api_interface = API_Client.getClient().create(API_Interface.class);
+
+        messageList = new ArrayList<>();
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new StepThreeAdapter(messageList, this);
+        recyclerView.setAdapter(adapter);
 
 
 
@@ -135,10 +163,12 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
     public void startRecording(){
         Log.d("성공", "녹음 시작");
 
-        String filename = String.valueOf(rand.nextInt(1000000));
+        Long datetime = System.currentTimeMillis();
+        String time = datetime.toString();
+        String filename = String.valueOf(System.currentTimeMillis());
         Log.d("filename", filename);
 
-        filepath = getExternalFilesDir(null).getAbsolutePath() + "/" +filename +".mp3";
+        filepath = getCacheDir().getAbsolutePath() + "/" +time +".mp3";
         Log.d("filepath", filepath);
 
 
@@ -153,6 +183,7 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
             mediaRecorder.prepare();
             mediaRecorder.start();
             isRecording = true;
+            RecordButton.setBackgroundResource(R.drawable.record_stop);
         } catch(IOException e){
             e.printStackTrace();
         }
@@ -166,6 +197,7 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
             mediaRecorder.release();
             mediaRecorder = null;
             isRecording = false;
+            RecordButton.setBackgroundResource(R.drawable.record_start);
             File recordedFile = new File(filepath);
             Log.d("성공", "파일 전송");
 
@@ -207,6 +239,7 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
 
                         String sttResult = jObject.getString("stt_result");
                         historyMsg = updateHistory(historyMsg, sttResult);
+                        addMessage(sttResult, true);
 
                         JSONObject jTotalScore = jObject.getJSONObject("total_score");
                         String jPronScore = jTotalScore.getString("pron_score");
@@ -224,13 +257,16 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
                         JSONObject aiResponseObject = new JSONObject(aiResponse);
                         String content = aiResponseObject.getString("content");
 
+                        TextToSpeech(content);
+
                         historyMsg = updateHistory(historyMsg, content);
 
                         AITextView.setText(content);
 
+                        addMessage(content, false);
+
                         Log.d("TTS", content);
 
-                        TextToSpeech(content);
 
                         USERsttTextView.setText(sttResult);
 
@@ -257,16 +293,6 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
 
     private void CheckGoals(String roleplay){
         RequestBody requestHistory = RequestBody.create(MediaType.parse("text/plain"), historyMsg);
-
-//        String[] historyArray = historyMsg.split("/");
-//        for (String msg : historyArray){
-//            String[] parts = msg.split(":", 2);
-//            if (parts.length ==2){
-//                messages.add(new Message(parts[0], parts[1]));
-//            }
-//        }
-//        Messages requestBody = new Messages(messages);
-
         api_interface.checkGoals(roleplay, requestHistory).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -300,21 +326,6 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
                             showPopup();
                         }
 
-
-//                        for (int i = 0; i < goalList.length(); i++) {
-//                            JSONObject goal = goalList.getJSONObject(i);
-//                            String goalName = goal.getString("goal");
-//                            boolean accomplished = goal.getBoolean("accomplished");
-//                            Log.d("Goal", goalName + ": " + (accomplished ? "Achieved" : "Not Achieved"));
-//
-//                            if (!accomplished) {
-//                                allGoalsAchieved = false;
-//                            }
-//                        }
-//                        if(allGoalsAchieved){
-//                            showPopup();
-//                        }
-
                     } catch (IOException | JSONException e) {
                         throw new RuntimeException(e);
                     }
@@ -339,7 +350,7 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
 
     private void showPopup() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        View popupView = inflater.inflate(R.layout.layout_popup, null);
+        View popupView = inflater.inflate(R.layout.layout__complete, null);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setView(popupView);
@@ -379,10 +390,10 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     // TTS 성공 처리
+                    ttsaudioindex++;
                     Log.d("TTS 성공", "음성 변환 성공");
-                    saveAudioFile(response.body().byteStream(), "tts_audio.mp3");
-
-
+                    saveAudioFile(response.body().byteStream(), "tts_audio" + ttsaudioindex + ".mp3");
+                    lock = 0;
                     // 여기서 추가적으로 오디오 파일을 재생하는 로직을 추가할 수 있습니다.
                 } else {
                     Log.e("TTS 실패", "서버 응답: " + response.code() + " - " + response.message());
@@ -397,7 +408,7 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
     }
     private void saveAudioFile(InputStream inputStream, String fileName) {
         try {
-            File file = new File(getExternalFilesDir(null), fileName);
+            File file = new File(getCacheDir(), fileName);
             FileOutputStream outputStream = new FileOutputStream(file);
             byte[] buffer = new byte[4096];
             int bytesRead;
@@ -412,10 +423,10 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void startPlaying() {
+    public void startPlaying(String filepath) {
         mediaPlayer = new MediaPlayer();
         try {
-            mediaPlayer.setDataSource(getExternalFilesDir(null).getAbsolutePath() + "/tts_audio.mp3");
+            mediaPlayer.setDataSource(filepath);
             mediaPlayer.prepare();
             mediaPlayer.start();
             isPlaying = true;
@@ -439,6 +450,25 @@ public class Step3Activity extends AppCompatActivity implements View.OnClickList
             isPlaying = false;
         }
     }
+
+    private void addMessage(String text, boolean isUser) {
+        messageList.add(new StepThreeMessage(text, isUser));
+        adapter.notifyItemInserted(messageList.size() - 1);
+        recyclerView.scrollToPosition(messageList.size() - 1);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        File[] directory = getCacheDir().listFiles();
+        if(directory != null) {
+            for (File file : directory) {
+                file.delete();
+            }
+        }
+    }
+
+
 
 
 
