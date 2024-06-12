@@ -3,7 +3,6 @@ package com.example.haneum;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +67,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v){
-        Intent intent = new Intent(getActivity().getApplicationContext(), Step3Activity.class);
+        Intent intent = new Intent(getActivity().getApplicationContext(), StepThreeActivity.class);
 
         if (v == situ1) {
             if(topic.equals("treatment")) {

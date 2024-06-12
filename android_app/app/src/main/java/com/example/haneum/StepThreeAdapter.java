@@ -43,9 +43,9 @@ public class StepThreeAdapter extends RecyclerView.Adapter<StepThreeAdapter.Mess
             holder.buttonPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (context instanceof Step3Activity) {
+                    if (context instanceof StepThreeActivity) {
                         String filePath = context.getCacheDir().getAbsolutePath() + "/tts_audio" + position + ".mp3";
-                        ((Step3Activity) context).startPlaying(getFilePath(position)); // 오디오 파일 재생
+                        ((StepThreeActivity) context).startPlaying(getFilePath(position)); // 오디오 파일 재생
                     }
                 }
             });
