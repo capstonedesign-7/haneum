@@ -44,16 +44,24 @@ correction_instruction = """
 -답변은 추가되는 내용 없이 수정된 내용을 그대로 답변해야한다.
 """
 
-assessment_instruction = """
--너는 외국인의 한국어 학습을 돕는 어시스턴트다.
+assessment_instruction = ["""
+-결과에 대하여 한국어로 대답해라.
+-한국어를 제외한 언어는 결과에 사용하지 않는다.
+-너는 외국인 유학생의 한국어 학습을 돕는 어시스턴트다.
 -질문에 대해 대답이 알맞은지 평가하고, 대답이 적절하지 않다면 그 이유를 설명하라
 -의사와 환자간의 대화 상황을 가정하고 질문과 대답을 진행한다.
 -의사의 질문은 다음과 같다 : {lv2_question}
 -환자의 답변은 다음과 같다 : {user_input}
--{language_option}로 대답해라.
+""",
 """
-
-lang_option = ["한국어", "베트남어", "중국어"]
+- Trả lời bằng tiếng Việt về kết quả.
+- Vì người nói tiếng Việt sẽ kiểm tra kết quả nên ngoại trừ tiếng Việt thì ngôn ngữ không được sử dụng cho kết quả.
+- Bạn là trợ lý giúp du học sinh Việt Nam học tiếng Hàn.
+- Hãy đánh giá xem câu trả lời cho câu hỏi có đúng hay không và giải thích tại sao nếu câu trả lời không đúng.
+- Giả định tình huống trò chuyện giữa bác sĩ và bệnh nhân, tiến hành đặt câu hỏi và trả lời.
+- Các câu hỏi của bác sĩ như sau: {lv2_question}
+- Câu trả lời của bệnh nhân như sau: {user_input}
+"""]
 
 roleplay_to_system_prompt_map = {
         "situation1": """\
@@ -85,7 +93,8 @@ roleplay_to_goal_map = {
                        "내가 지금 먹고있는 약이 있는지 말하기"]
         }
 
-def stt_with_correction(audio_path):
+async def stt_with_correction(audio_path):
+
     #Speech to Text
     audio_file = open(audio_path, "rb")
     transcript = client.audio.transcriptions.create(
@@ -95,31 +104,31 @@ def stt_with_correction(audio_path):
         response_format="text",
         temperature=0.0,
         )
-    print(transcript)
+
     #Misronouonce Correction with LLM
     chat_prompt = ChatPromptTemplate.from_messages([
         ("system", correction_instruction),
         ("user", "{transcript}")
     ])
     chain = chat_prompt | llm | StrOutputParser()
-    corrected_stt = chain.invoke({"transcript": str(transcript)})
+
+    corrected_stt = await chain.ainvoke({"transcript": str(transcript)})
     
     return str(corrected_stt)
 
-def contents_feedback(corrected_stt, lv2_question, lang_option):
+async def contents_feedback(corrected_stt, lv2_question, lang_idx):
     #Contents Assessment
     chat_prompt = ChatPromptTemplate.from_messages([
-        ("system", assessment_instruction),
+        ("system", assessment_instruction[lang_idx]),
         ("user", "{user_input}")
     ])
     chain = chat_prompt | llm | StrOutputParser()
-    assessment = chain.invoke({"lv2_question": lv2_question,
-                               "user_input": str(corrected_stt),
-                               "language_option": lang_option})
+    assessment = await chain.ainvoke({"lv2_question": lv2_question,
+                                      "user_input": str(corrected_stt)})
     return assessment
     
 
-def detect_goal_completion(messages, roleplay):
+async def detect_goal_completion(messages, roleplay):
     global parser, format_instruction
 
     # Conversation
@@ -144,13 +153,13 @@ def detect_goal_completion(messages, roleplay):
     chat_prompt_template = ChatPromptTemplate.from_messages([("user", prompt_template)])
     goal_check_chain = chat_prompt_template | llm | parser
 
-    outputs = goal_check_chain.invoke({"conversation": conversation,
-                                       "goals": goals,
-                                       "format_instruction": format_instruction})
+    outputs = await goal_check_chain.ainvoke({"conversation": conversation,
+                                             "goals": goals,
+                                             "format_instruction": format_instruction})
     return outputs
 
 
-def chat(messages):
+async def chat(messages):
     messages_lc = []
     for msg in messages:
         msg_class = type_to_msg_class_map[msg["role"]]
@@ -158,7 +167,7 @@ def chat(messages):
 
         messages_lc.append(msg_lc)
         
-    resp = llm.invoke(messages_lc)
+    resp = await llm.ainvoke(messages_lc)
     return {"role": "assistant", "content": resp.content}
 
 async def chat_tts(content, file_path):
