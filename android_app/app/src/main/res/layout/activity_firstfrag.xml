@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/firstfrag"
+    >
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -21,6 +23,7 @@
 
         <!-- 화제 설명 -->
         <TextView
+            android:id="@+id/l_topic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -35,6 +38,7 @@
             android:textStyle="bold"
             android:text="화제 1. 진료"/>
         <TextView
+            android:id="@+id/l_topic_goal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_round"
@@ -44,10 +48,11 @@
             android:layout_marginBottom="5dp"
             android:padding="10dp"
             android:breakStrategy="simple"
-            android:text="병원에서 진료를 볼 때 사용할 수 있는 한국어를 공부해 보세요!"/>
+            />
 
         <!-- 1단계 -->
         <TextView
+            android:id="@+id/step1_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -57,8 +62,9 @@
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="1단계. 표현 익히기"/>
+            />
         <TextView
+            android:id="@+id/step1_goal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -67,9 +73,9 @@
             android:layout_marginBottom="5dp"
             android:padding="10dp"
             android:background="@drawable/shape_round"
-            android:text="모든 문장을 따라 읽고 평가 결과를 확인해 보세요!"/>
+            />
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/step1_start"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginLeft="15dp"
@@ -84,6 +90,7 @@
 
         <!-- 2단계 -->
         <TextView
+            android:id="@+id/step2_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -93,9 +100,10 @@
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="2단계. 질문에 답변하기" />
+            />
 
         <TextView
+            android:id="@+id/step2_goal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -104,7 +112,7 @@
             android:layout_marginBottom="5dp"
             android:padding="10dp"
             android:background="@drawable/shape_round"
-            android:text="모든 질문에 대해 답변하고 평가 결과를 확인해 보세요!"/>
+            />
         <Button
             android:id="@+id/step2_start"
             android:layout_width="match_parent"

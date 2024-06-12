@@ -32,11 +32,13 @@ public class StepTwoActivity extends AppCompatActivity implements View.OnClickLi
     RecyclerView vieee;
     StepOneTwoAdapter adapterr;
     ArrayList item;
+    String getTopic, getSituation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_steptwo);
-
+        getTopic = getIntent().getStringExtra("topic");
+        getSituation = getIntent().getStringExtra("situation");
         /* Toolbar */
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -46,25 +48,25 @@ public class StepTwoActivity extends AppCompatActivity implements View.OnClickLi
         filepath = getCacheDir().getAbsolutePath();
         vieee = (RecyclerView) findViewById(R.id.steptwo_list);
         vieee.setItemViewCacheSize(20); // 캐시 사이즈 크게 설정해서 재사용 막음..
-        adapterr = new StepOneTwoAdapter();
+        adapterr = new StepOneTwoAdapter(this, getTopic, getSituation);
 
         vieee.setAdapter(adapterr);
         vieee.setLayoutManager(new LinearLayoutManager(this));
 
         /* adapt data */
         item = new ArrayList<>();
-
-        item.add(new StepOneTwo_Class("2","11","밥은 잘 드시고 계신가요?", "step2_1_audio.mp3",filepath+"/step2_1_record"));
-        item.add(new StepOneTwo_Class("2","12","혹시 알레르기가 있나요?", "step2_2_audio.mp3",filepath+"/step2_2_record"));
-        item.add(new StepOneTwo_Class("2","13","가족과 함께 생활하시나요?", "step2_3_audio.mp3",filepath+"/step2_3_record"));
-        item.add(new StepOneTwo_Class("2","14","언제 가장 많이 아프세요?", "step2_4_audio.mp3",filepath+"/step2_4_record"));
-        item.add(new StepOneTwo_Class("2","15","언제부터 증상이 있으셨던 거예요?", "step2_5_audio.mp3",filepath+"/step2_5_record"));
-        item.add(new StepOneTwo_Class("2","16","본인 혈액형이 어떻게 되세요?", "step2_6_audio.mp3",filepath+"/step2_6_record"));
-        item.add(new StepOneTwo_Class("2","17","최근 잠은 평균 몇 시간 정도 주무셨나요?", "step2_7_audio.mp3",filepath+"/step2_7_record"));
-        item.add(new StepOneTwo_Class("2","18","꾸준히 하는 운동이 있으신가요?", "step2_8_audio.mp3",filepath+"/step2_8_record"));
-        item.add(new StepOneTwo_Class("2","19","혹시 알약을 못 드시나요?", "step2_9_audio.mp3",filepath+"/step2_9_record"));
-        item.add(new StepOneTwo_Class("2","20","또 다른 데, 아픈 곳 있으신가요?", "step2_10_audio.mp3",filepath+"/step2_10_record"));
-
+        if (getTopic.equals("treatment")) {
+            item.add(new StepOneTwo_Class("2", "11", "밥은 잘 드시고 계신가요?", "step2_1_audio.mp3", filepath + "/step2_1_record"));
+            item.add(new StepOneTwo_Class("2", "12", "혹시 알레르기가 있나요?", "step2_2_audio.mp3", filepath + "/step2_2_record"));
+            item.add(new StepOneTwo_Class("2", "13", "가족과 함께 생활하시나요?", "step2_3_audio.mp3", filepath + "/step2_3_record"));
+            item.add(new StepOneTwo_Class("2", "14", "언제 가장 많이 아프세요?", "step2_4_audio.mp3", filepath + "/step2_4_record"));
+            item.add(new StepOneTwo_Class("2", "15", "언제부터 증상이 있으셨던 거예요?", "step2_5_audio.mp3", filepath + "/step2_5_record"));
+            item.add(new StepOneTwo_Class("2", "16", "본인 혈액형이 어떻게 되세요?", "step2_6_audio.mp3", filepath + "/step2_6_record"));
+            item.add(new StepOneTwo_Class("2", "17", "최근 잠은 평균 몇 시간 정도 주무셨나요?", "step2_7_audio.mp3", filepath + "/step2_7_record"));
+            item.add(new StepOneTwo_Class("2", "18", "꾸준히 하는 운동이 있으신가요?", "step2_8_audio.mp3", filepath + "/step2_8_record"));
+            item.add(new StepOneTwo_Class("2", "19", "혹시 알약을 못 드시나요?", "step2_9_audio.mp3", filepath + "/step2_9_record"));
+            item.add(new StepOneTwo_Class("2", "20", "또 다른 데, 아픈 곳 있으신가요?", "step2_10_audio.mp3", filepath + "/step2_10_record"));
+        }
 
         adapterr.setItemList(item);
 
@@ -112,10 +114,6 @@ public class StepTwoActivity extends AppCompatActivity implements View.OnClickLi
                             file.delete();
                         }
                     }
-                    SharedPreferences sharedPreferences = getSharedPreferences("step1_sum", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putInt("step2_sum", 0);
-                    editor.commit();
 
                     dialog.dismiss();
                     finish(); // 액티비티 종료

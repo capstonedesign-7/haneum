@@ -1,8 +1,10 @@
 package com.example.haneum;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +25,7 @@ import retrofit2.Callback;
 public class API_Connect {
 
 
-    public void connect(String apiStep, File file, String idx, String lang, Result_Interface result_interface) {
+    public void connect(Context context, String apiStep, File file, String idx, String lang, Result_Interface result_interface ) {
 
 
         API_Interface api_interface = API_Client.getClient().create(API_Interface.class);
@@ -48,7 +50,7 @@ public class API_Connect {
                         result_interface.success(result);
                     }else if (response.code()==420) {
                         Log.d("error", "420 error"); // 오디오 ( 공백 또는 음성 추출 불가 ) 일 때, 토스트 메시지 등 필요할 듯
-
+                        Toast.makeText(context, "다시 녹음해주세요.", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -73,6 +75,7 @@ public class API_Connect {
                         result_interface.success(result);
                     }else if (response.code()==420) {
                             Log.d("error", "420 error"); // 오디오 ( 공백 또는 음성 추출 불가 ) 일 때, 토스트 메시지 등 필요할 듯
+                            Toast.makeText(context, "다시 녹음해주세요.", Toast.LENGTH_SHORT).show();
                     }
                 }
 

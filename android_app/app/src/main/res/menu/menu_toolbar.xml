@@ -4,14 +4,15 @@
 
     <item
         android:id="@+id/toolbar_setting"
-        android:icon="@drawable/img_logo"
+        android:icon="@drawable/setting"
         android:title="Setting"
         app:showAsAction="always" />
 
     <item
         android:id = "@+id/toolbar_exit"
-        android:icon="@drawable/img_logo"
+        android:icon="@drawable/close"
         android:title="Exit"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        />
 
 </menu>
