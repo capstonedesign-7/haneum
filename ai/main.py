@@ -10,6 +10,7 @@ from pronounce_assess import *
 from audio_convert import *
 from temp_prompts import *
 from openAI_chains import *
+from openAI_chains import Messages
 
 app = FastAPI()
 
@@ -28,7 +29,6 @@ async def read_text(content_idx: int):
 @app.get("/{roleplay}/goals")
 async def get_roleplay_goals(roleplay: str):
     return roleplay_to_goal_map[roleplay]
-
 
 @app.post("/lev1_assessment")
 async def transcribe_audio(audio_file: UploadFile=File(...), content_idx: int=Form(...)):
@@ -107,7 +107,6 @@ async def post_chat_role_play(roleplay: str, history_msg: str=Form(...), audio_f
         tempdict["role"] = role
         tempdict["content"] = temp_str[i]
         msgs.append(tempdict)
-
     system_prompt = roleplay_to_system_prompt_map[roleplay]
     msgs = [{"role": "system", "content": system_prompt}] + msgs + [{"role": "user", "content": stt_result}]
     resp = chat(messages=msgs)

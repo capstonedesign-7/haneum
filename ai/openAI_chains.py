@@ -1,3 +1,4 @@
+import os
 from typing import List
 
 from openai import OpenAI
@@ -93,6 +94,7 @@ roleplay_to_goal_map = {
         }
 
 async def stt_with_correction(audio_path):
+
     #Speech to Text
     audio_file = open(audio_path, "rb")
     transcript = client.audio.transcriptions.create(
@@ -102,12 +104,14 @@ async def stt_with_correction(audio_path):
         response_format="text",
         temperature=0.0,
         )
+
     #Misronouonce Correction with LLM
     chat_prompt = ChatPromptTemplate.from_messages([
         ("system", correction_instruction),
         ("user", "{transcript}")
     ])
     chain = chat_prompt | llm | StrOutputParser()
+
     corrected_stt = await chain.ainvoke({"transcript": str(transcript)})
     
     return str(corrected_stt)

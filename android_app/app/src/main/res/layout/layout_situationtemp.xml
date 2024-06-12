@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="160dp"
+    android:layout_height="120dp"
+    android:id="@+id/situ_temp"
+    android:orientation="horizontal"
+
+    android:foreground="?android:attr/selectableItemBackground"
+    android:background="@drawable/situ_rec"
+    >
+
+
+    <TextView
+        android:id="@+id/temp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="15dp"
+        android:textColor="#A6A6A6"
+        android:textStyle="bold" />
+
+
+</LinearLayout>
