@@ -45,4 +45,8 @@
     <string name="monotone">monotone</string>
     <string name="unexpectedbreak">unexpectedbreak</string>
     <string name="step3_ai_start">Please say \"안녕하세요\" to start the conversation.</string>
+    <string name="close">Are you sure you want to exit?</string>
+    <string name="exit">Exit</string>
+    <string name="show">Show</string>
+    <string name="cancel">Cancel</string>
 </resources>

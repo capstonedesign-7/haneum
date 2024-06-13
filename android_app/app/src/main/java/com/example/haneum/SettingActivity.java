@@ -1,9 +1,8 @@
 package com.example.haneum;
 
-import android.app.Activity;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,12 +16,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
-import java.util.Locale;
+
 
 public class SettingActivity extends AppCompatActivity {
-    Button ReturnBtn;
+
     String language;
     int locale_number; // 현재 설정되어 있는 언어
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,37 +32,11 @@ public class SettingActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled((false));
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
+        /* 언어 설정*/
         LanguageSet languageSet = new LanguageSet();
         language = languageSet.getLanguage(this);
-        /* 내부 저장소 값 */
-        /*
-        SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
-        if(sharedPreferences.contains("language")){
-            //locale_number = sharedPreferences.getInt("language", -1);
-            lang = sharedPreferences.getString("language", "");
-        }else{
-            //locale_number = 0;
-            lang = "ko";
-        }
-        */
-
-        /* Spinner */
-        Spinner spinner = (Spinner) findViewById(R.id.selec_language);
-
-        /*
-        String lan;
-        if (locale_number == 0){
-            lan = "ko";
-        }else if(locale_number==1){
-            lan = "vi";
-        }else{
-            lan = "ko";
-        }
-        */
 
         if (language.equals("ko")){
             locale_number = 0;
@@ -73,18 +47,18 @@ public class SettingActivity extends AppCompatActivity {
         }
 
 
+        /* Spinner */
+        Spinner spinner = (Spinner) findViewById(R.id.selec_language);
+
+
         TextView set_language = findViewById(R.id.set_language);
-        //set_language.setText(getStringByLocal(this, R.string.lang_set, lan));
         set_language.setText("Language");
 
         ArrayList<String> locales = new ArrayList<>();
-        //locales.add(getStringByLocal(this, R.string.kor, lan));
-        //locales.add(getStringByLocal(this, R.string.vie, lan));
         locales.add("Korean, 한국어");
         locales.add("Vietnamese, tiếng Việt");
 
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, locales);
-
         spinner.setAdapter(adapter);
 
         SharedPreferences sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
@@ -107,7 +81,7 @@ public class SettingActivity extends AppCompatActivity {
                     }else if(i == 1){
                         editor.putString("language", "vi");
                     }
-                    //editor.putInt("language", i);
+
                     editor.commit();
 
                     Intent intent = getBaseContext().getPackageManager()
@@ -135,12 +109,5 @@ public class SettingActivity extends AppCompatActivity {
         return true;
     }
 
-    /*
-    public static String getStringByLocal(Activity context, int resId, String locale){
-        Configuration configuration = new Configuration(context.getResources().getConfiguration());
-        configuration.setLocale(new Locale(locale));
-        return context.createConfigurationContext(configuration).getResources().getString(resId);
-    }
-    */
 
 }

@@ -1,14 +1,13 @@
 package com.example.haneum;
 
 import static android.content.Context.MODE_PRIVATE;
-import static androidx.core.content.ContextCompat.getSystemService;
+
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
-import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Handler;
@@ -20,14 +19,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.zip.Inflater;
+
 
 public class StepOneTwoAdapter extends RecyclerView.Adapter<StepOneTwoAdapter.ViewHolder> {
     private ArrayList<StepOneTwo_Class> step_list = new ArrayList<>();
@@ -36,18 +35,15 @@ public class StepOneTwoAdapter extends RecyclerView.Adapter<StepOneTwoAdapter.Vi
     SharedPreferences sharedPreferences;
     String lan;
     String sum, comple, now, step;
-    int step_sum, step_comple;
     private Activity activity;
     String language;
     private String getTopic, getSituation;
+
     public StepOneTwoAdapter(Activity activity, String getTopic, String getSituation){
         this.activity=activity;
         this.getTopic = getTopic;
         this.getSituation = getSituation;
-
-
     }
-
 
     @NonNull
     @Override
@@ -56,7 +52,6 @@ public class StepOneTwoAdapter extends RecyclerView.Adapter<StepOneTwoAdapter.Vi
         if (viewType == 1) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_stepone, parent, false);
             context = parent.getContext();
-
             return new ViewHolder(view);
         }else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_steptwo, parent, false);
@@ -69,13 +64,13 @@ public class StepOneTwoAdapter extends RecyclerView.Adapter<StepOneTwoAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull StepOneTwoAdapter.ViewHolder holder, int position) {
         holder.onBind(step_list.get(position));
-
     }
 
     public void setItemList(ArrayList<StepOneTwo_Class> list){
         this.step_list = list;
         notifyDataSetChanged();
     }
+
     @Override
     public int getItemViewType(int position) {
         if (step_list.get(position).getStepNum() == "1") {
@@ -98,15 +93,13 @@ public class StepOneTwoAdapter extends RecyclerView.Adapter<StepOneTwoAdapter.Vi
         ImageView record_start, record_stop, audio_start;
         LinearLayout words_score;
         TextView contents_feedback, stt_result;
-
         String recordFile;
         MediaRecorder mediaRecorder;
-
         StepOneTwo_Class item;
         LayoutInflater layoutInflater;
-
         String stepNum;
         int t;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             LanguageSet languageSet = new LanguageSet();
@@ -140,41 +133,35 @@ public class StepOneTwoAdapter extends RecyclerView.Adapter<StepOneTwoAdapter.Vi
             if(ans != null){
                 ans.setText(languageSet.getStringLocal(activity, R.string.answer, language));
             }
-            Log.d("error1", "여기서 오류");
+
             TextView evaluation = ll_result.findViewById(R.id.evaluation);
-            evaluation.setText(languageSet.getStringLocal(activity, R.string.evaluation, language));
-
             TextView compre = ll_result.findViewById(R.id.comprehensive_score);
-            compre.setText(languageSet.getStringLocal(activity, R.string.comprehensive_score, language));
-            Log.d("error1", "여기서 오류2");
             TextView acc = ll_result.findViewById(R.id.accuracy);
-            acc.setText(languageSet.getStringLocal(activity, R.string.accuracy, language));
-
             TextView com = ll_result.findViewById(R.id.completeness);
-            com.setText(languageSet.getStringLocal(activity, R.string.completeness, language));
-
             TextView flu = ll_result.findViewById(R.id.fluency);
-            flu.setText(languageSet.getStringLocal(activity, R.string.fluency, language));
 
             TextView wbw = ll_result.findViewById(R.id.wordbyword_score);
-            wbw.setText(languageSet.getStringLocal(activity, R.string.wordbyword_score, language));
-
             TextView pha = ll_result.findViewById(R.id.phrase);
-            pha.setText(languageSet.getStringLocal(activity, R.string.phrase, language));
-
             TextView sco = ll_result.findViewById(R.id.score);
-            sco.setText(languageSet.getStringLocal(activity, R.string.score, language));
-
             TextView res = ll_result.findViewById(R.id.result);
+
+            evaluation.setText(languageSet.getStringLocal(activity, R.string.evaluation, language));
+            compre.setText(languageSet.getStringLocal(activity, R.string.comprehensive_score, language));
+            acc.setText(languageSet.getStringLocal(activity, R.string.accuracy, language));
+            com.setText(languageSet.getStringLocal(activity, R.string.completeness, language));
+            flu.setText(languageSet.getStringLocal(activity, R.string.fluency, language));
+
+
+            wbw.setText(languageSet.getStringLocal(activity, R.string.wordbyword_score, language));
+            pha.setText(languageSet.getStringLocal(activity, R.string.phrase, language));
+            sco.setText(languageSet.getStringLocal(activity, R.string.score, language));
             res.setText(languageSet.getStringLocal(activity, R.string.result, language));
 
-            Log.d("error1", "여기서 오류3");
 
             sentence = (TextView) itemView.findViewById(R.id.v_sentence);
 
             record_start = (ImageView) itemView.findViewById(R.id.record_start);
             record_stop = (ImageView) itemView.findViewById(R.id.record_stop);
-
             audio_start = (ImageView) itemView.findViewById(R.id.audio_start);
 
             pron_score = (TextView) ll_result.findViewById(R.id.v_pron_score);
@@ -218,7 +205,6 @@ public class StepOneTwoAdapter extends RecyclerView.Adapter<StepOneTwoAdapter.Vi
                             }
 
                             if(pos != RecyclerView.NO_POSITION) {
-                                Log.d("sss", step_list.get(pos).getAudiofile());
 
                                 Long datetime = System.currentTimeMillis();
                                 String time = datetime.toString();
@@ -268,16 +254,18 @@ public class StepOneTwoAdapter extends RecyclerView.Adapter<StepOneTwoAdapter.Vi
                                 }else if(language.equals("vi")){
                                     lan = "1";
                                 }
-                                Log.d("language", lan);
+
+
                                 api_connect.connect(context, stepNum, file, item.getTextIdx(), lan, new Result_Interface() {
 
                                     @Override
                                     public void success(Result_Class result) {
-                                        Log.d("status", result.getStatus());
+
                                         Double p_score = Math.round(result.getTotal_score().getPron_score()*100)/100.0;
                                         Double a_score = Math.round(result.getTotal_score().getAccuracy_score()*100)/100.0;
                                         Double c_score = Math.round(result.getTotal_score().getCompleteness_score()*100)/100.0;
                                         Double f_score = Math.round(result.getTotal_score().getFluency_score()*100)/100.0;
+
                                         pron_score.setText(Double.toString(p_score));
                                         accuracy_score.setText(Double.toString(a_score));
                                         comple_score.setText(Double.toString(c_score));
@@ -303,12 +291,12 @@ public class StepOneTwoAdapter extends RecyclerView.Adapter<StepOneTwoAdapter.Vi
                                             String type = result.getWordsScore(i).getType();
 
                                             TextView words = vi[0].findViewById(R.id.v_www);
-                                            words.setText(word);
-
                                             TextView scores = vi[0].findViewById(R.id.v_nnn);
+                                            TextView types = vi[0].findViewById(R.id.v_ttt);
+
+                                            words.setText(word);
                                             scores.setText(score.toString());
 
-                                            TextView types = vi[0].findViewById(R.id.v_ttt);
 
                                             if (type.equals("None")){
                                                 t = R.string.none;
@@ -354,14 +342,11 @@ public class StepOneTwoAdapter extends RecyclerView.Adapter<StepOneTwoAdapter.Vi
                     }
             });
 
-
-
         }
 
         void onBind(StepOneTwo_Class item){
-            Log.d("error1", "여기서 오류5");
             sentence.setText(item.getSentence());
-            Log.d("error1", "여기서 오류6");
+
         }
 
 
@@ -428,7 +413,6 @@ public class StepOneTwoAdapter extends RecyclerView.Adapter<StepOneTwoAdapter.Vi
             step_state = 0;
         }
 
-        Log.d("comle", Integer.toString(comple_state));
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         if(comple_state == 0) {
@@ -436,8 +420,6 @@ public class StepOneTwoAdapter extends RecyclerView.Adapter<StepOneTwoAdapter.Vi
                 editor.putInt(now, 1);
                 editor.putInt(sum, sum_state + 1);
                 editor.commit();
-
-
 
                 if( sum_state+1 == 10){
                     Handler handler = new Handler();
@@ -454,8 +436,17 @@ public class StepOneTwoAdapter extends RecyclerView.Adapter<StepOneTwoAdapter.Vi
                             View dialogView = inflater.inflate(R.layout.layout_complete, null);
                             builder.setView(dialogView);
 
+                            LanguageSet languageSet = new LanguageSet();
+                            language = languageSet.getLanguage(activity);
+
+                            TextView close = dialogView.findViewById(R.id.complete);
                             Button btnCancel = dialogView.findViewById(R.id.btnCancel);
                             Button btnExit = dialogView.findViewById(R.id.btnExit);
+
+                            close.setText(languageSet.getStringLocal(activity, R.string.close, language));
+                            btnCancel.setText(languageSet.getStringLocal(activity, R.string.show, language));
+                            btnExit.setText(languageSet.getStringLocal(activity, R.string.exit, language));
+
 
                             final AlertDialog dialog = builder.create();
                             btnCancel.setOnClickListener(new View.OnClickListener() {

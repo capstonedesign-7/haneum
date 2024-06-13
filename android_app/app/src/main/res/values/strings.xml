@@ -36,7 +36,7 @@
     <string name="result">결과</string>
     <string name="question">질문</string>
     <string name="answering">답변하기</string>
-    <string name="answer">답변 :</string>
+    <string name="answer">답변&#160;&#160;:&#160;&#160;</string>
     <string name="none">문제없음</string>
     <string name="omission">발음 누락</string>
     <string name="insertion">발음 삽입</string>
@@ -45,4 +45,8 @@
     <string name="missingbreak">쉬지 않고 붙여 말함</string>
     <string name="monotone">잘못된 악센트</string>
     <string name="step3_ai_start">대화를 시작하시려면 \"안녕하세요\"라고 말해주세요.</string>
+    <string name="close">종료하시겠습니까?</string>
+    <string name="exit">종료</string>
+    <string name="show">보기</string>
+    <string name="cancel">취소</string>
 </resources>

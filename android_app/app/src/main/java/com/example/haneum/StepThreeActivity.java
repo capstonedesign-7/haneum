@@ -1,6 +1,6 @@
 package com.example.haneum;
 
-import java.util.Random;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,9 +9,17 @@ import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.Button;
 import android.util.Log;
-import androidx.appcompat.widget.Toolbar;
 import android.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.widget.Toast;
+import android.widget.TextView;
+import android.media.MediaRecorder;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -21,19 +29,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
-import android.widget.Toast;
-import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import android.media.MediaRecorder;
+
+
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,27 +47,29 @@ import org.json.JSONException;
 public class StepThreeActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button RecordButton;
+    Button playButton;
     MediaRecorder mediaRecorder;
     MediaPlayer mediaPlayer;
-    String filepath;
     boolean isRecording = false;
     boolean isPlaying = false;
     TextView AITextView, USERsttTextView;
     TextView v_accuracy, v_comple, v_fluency;
     TextView accu, comple, flu;
-    Button playButton;
+    SharedPreferences sharedPreferences;
+    int lock = 1;
+    int comple_state, role_state;
+    String getSituation, getTopic;
+    String language;
+    String filepath;
+    API_Interface api_interface;
+
     private int ttsaudioindex = 0;
     private String historyMsg = " ";
     private String roleplay;
     private RecyclerView recyclerView;
     private StepThreeAdapter adapter;
     private List<StepThreeMessage> messageList;
-    SharedPreferences sharedPreferences;
-    int lock = 1;
-    int comple_state, role_state;
-    String getSituation, getTopic;
-    String language;
-    API_Interface api_interface;
+
 
     private static final Map<String, List<String>> roleplayToGoalMap = new HashMap<String, List<String>>() {{
         put("situation1", Arrays.asList("아픈곳 말하기", "이름과 생년월일 말하기", "진료예약 확인하기"));
@@ -350,8 +358,16 @@ public class StepThreeActivity extends AppCompatActivity implements View.OnClick
         alertDialogBuilder.setView(popupView);
         final AlertDialog alertDialog = alertDialogBuilder.create();
 
-        Button btnExit = popupView.findViewById(R.id.btnExit);
+        LanguageSet languageSet = new LanguageSet();
+        language = languageSet.getLanguage(this);
+
+        TextView close = popupView.findViewById(R.id.complete);
         Button btnCancel = popupView.findViewById(R.id.btnCancel);
+        Button btnExit = popupView.findViewById(R.id.btnExit);
+
+        close.setText(languageSet.getStringLocal(this, R.string.close, language));
+        btnCancel.setText(languageSet.getStringLocal(this, R.string.show, language));
+        btnExit.setText(languageSet.getStringLocal(this, R.string.exit, language));
 
         btnExit.setOnClickListener(v -> {
             alertDialog.dismiss();
