@@ -6,12 +6,16 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.app.AlertDialog;
-
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -20,26 +24,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-
-import okhttp3.ResponseBody;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    LinearLayout situ;
+
     String language;
     SharedPreferences sharedPreferences;
     int step1_state, step2_state, step3_state;
@@ -47,13 +36,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ImageView step1_i;
     ImageView step2_i;
     ImageView step3_i;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
 
         super.onCreate(savedInstanceState);
-        //EdgeToEdge.enable(this); // MainActivity color 안 바뀐 이유
         setContentView(R.layout.activity_main);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -66,25 +55,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ActivityCompat.requestPermissions(this , new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO},0);
 
-
+        /* Toolbar */
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled((false));
 
-        TextView situation = findViewById(R.id.situation);
+        /* 언어 설정 */
         LanguageSet languageSet = new LanguageSet();
         language = languageSet.getLanguage(this);
 
-        situation.setText(languageSet.getStringLocal(this, R.string.situation, language));
-
+        TextView situation = findViewById(R.id.situation);
         TextView temp = findViewById(R.id.temp);
+
+        situation.setText(languageSet.getStringLocal(this, R.string.situation, language));
         temp.setText(languageSet.getStringLocal(this, R.string.later, language));
 
-        //situ = findViewById(R.id.situ_hos);
-        //situ.setOnClickListener(this);
-
-
-
+        /* 병원 */
         LinearLayout hospital = findViewById(R.id.l_hospital);
         hospital.setOnClickListener(this);
 
@@ -98,16 +84,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         step2_i = hospital.findViewById(R.id.i_step2);
         step3_i = hospital.findViewById(R.id.i_step3);
 
-        sharedPreferences = getSharedPreferences("step", MODE_PRIVATE);
-
-
-
         hos_image.setImageResource(R.drawable.hospital);
         hos_name.setText(languageSet.getStringLocal(this, R.string.hospital, language));
         hos_step1.setText(languageSet.getStringLocal(this, R.string.step1, language));
         hos_step2.setText(languageSet.getStringLocal(this, R.string.step2, language));
         hos_step3.setText(languageSet.getStringLocal(this, R.string.step3, language));
 
+        sharedPreferences = getSharedPreferences("step", MODE_PRIVATE);
 
 
     }
@@ -171,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_toolbar, menu);
-        menu.getItem(1).setVisible(false); //
+        menu.getItem(1).setVisible(false);
         return true;
     }
 
@@ -196,8 +179,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View dialogView = inflater.inflate(R.layout.layout_exit, null);
         builder.setView(dialogView);
 
+        LanguageSet languageSet = new LanguageSet();
+        language = languageSet.getLanguage(this);
+
+        TextView close = dialogView.findViewById(R.id.close);
         Button btnCancel = dialogView.findViewById(R.id.btnCancel);
         Button btnExit = dialogView.findViewById(R.id.btnExit);
+
+        close.setText(languageSet.getStringLocal(this, R.string.close, language));
+        btnCancel.setText(languageSet.getStringLocal(this, R.string.cancel, language));
+        btnExit.setText(languageSet.getStringLocal(this, R.string.exit, language));
 
         final AlertDialog dialog = builder.create();
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -213,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        dialog.show();
+        dialog.show(); // 팝업 출력
     }
 
 

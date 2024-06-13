@@ -36,7 +36,7 @@
     <string name="result">kết quả</string>
     <string name="question">câu hỏi</string>
     <string name="answering">Trả lời</string>
-    <string name="answer">"câu trả lời : "</string>
+    <string name="answer">câu trả lời&#160;&#160;:&#160;&#160;</string>
     <string name="none">Không thành vấn đề</string>
     <string name="omission">Thiếu phát âm</string>
     <string name="insertion">lồng tiếng</string>
@@ -45,4 +45,8 @@
     <string name="monotone">trọng âm sai</string>
     <string name="unexpectedbreak">sự giảm âm</string>
     <string name="step3_ai_start">Nếu muốn bắt đầu cuộc trò chuyện thì hãy nói \"안녕하세요\".</string>
+    <string name="close">Anh có muốn kết thúc không?</string>
+    <string name="exit">sự chấm dứt</string>
+    <string name="show">nhìn</string>
+    <string name="cancel">sự hủy bỏ</string>
 </resources>

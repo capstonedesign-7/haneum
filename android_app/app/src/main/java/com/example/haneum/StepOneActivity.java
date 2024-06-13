@@ -1,19 +1,14 @@
 package com.example.haneum;
 
 import android.app.AlertDialog;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -23,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
 import java.util.ArrayList;
 
-import org.json.JSONObject;
 
 public class StepOneActivity extends AppCompatActivity  implements View.OnClickListener{
 
@@ -37,6 +31,7 @@ public class StepOneActivity extends AppCompatActivity  implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stepone);
+
         getTopic = getIntent().getStringExtra("topic");
         getSituation = getIntent().getStringExtra("situation");
 
@@ -46,21 +41,19 @@ public class StepOneActivity extends AppCompatActivity  implements View.OnClickL
         getSupportActionBar().setDisplayShowTitleEnabled((false));
 
 
-
         filepath = getCacheDir().getAbsolutePath();
 
         vieee = (RecyclerView) findViewById(R.id.stepone_list);
         vieee.setItemViewCacheSize(20); // 캐시 사이즈 크게 설정해서 재사용 막음..
-        adapterr = new StepOneTwoAdapter(this, getTopic, getSituation);
-        //adapter = new StepOneTwoAdapter();
 
+        adapterr = new StepOneTwoAdapter(this, getTopic, getSituation);
         vieee.setAdapter(adapterr);
         vieee.setLayoutManager(new LinearLayoutManager(this));
 
         /* adapt data */
         item = new ArrayList<>();
 
-        if (getTopic.equals("treatment")) {
+        if (getSituation.equals("hospital") && getTopic.equals("treatment")) { // 병원 상황 & 진료 화제일 경우
             item.add(new StepOneTwo_Class("1", "1", "코가 막히고 목이 따끔거리고 기침이 나요", "step1_1_audio.mp3", filepath + "/step1_1_record"));
             item.add(new StepOneTwo_Class("1", "2", "언제쯤 나아서 학교에 갈 수 있나요?", "step1_2_audio.mp3", filepath + "/step1_2_record"));
             item.add(new StepOneTwo_Class("1", "3", "전에도 갑자기 아팠던 적이 있어요.", "step1_3_audio.mp3", filepath + "/step1_3_record"));
@@ -98,8 +91,17 @@ public class StepOneActivity extends AppCompatActivity  implements View.OnClickL
             View dialogView = inflater.inflate(R.layout.layout_exit, null);
             builder.setView(dialogView);
 
+            LanguageSet languageSet = new LanguageSet();
+            String language = languageSet.getLanguage(this);
+
+            TextView close = dialogView.findViewById(R.id.close);
             Button btnCancel = dialogView.findViewById(R.id.btnCancel);
             Button btnExit = dialogView.findViewById(R.id.btnExit);
+
+            close.setText(languageSet.getStringLocal(this, R.string.close, language));
+            btnCancel.setText(languageSet.getStringLocal(this, R.string.cancel, language));
+            btnExit.setText(languageSet.getStringLocal(this, R.string.exit, language));
+
 
             final AlertDialog dialog = builder.create();
             btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +110,7 @@ public class StepOneActivity extends AppCompatActivity  implements View.OnClickL
                     dialog.dismiss();
                 }
             });
+
             btnExit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

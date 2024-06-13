@@ -1,9 +1,6 @@
 package com.example.haneum;
 
 import android.app.AlertDialog;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,17 +8,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-
-import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,6 +31,7 @@ public class StepTwoActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_steptwo);
         getTopic = getIntent().getStringExtra("topic");
         getSituation = getIntent().getStringExtra("situation");
+
         /* Toolbar */
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -55,7 +48,7 @@ public class StepTwoActivity extends AppCompatActivity implements View.OnClickLi
 
         /* adapt data */
         item = new ArrayList<>();
-        if (getTopic.equals("treatment")) {
+        if (getSituation.equals("hospital") && getTopic.equals("treatment")) {
             item.add(new StepOneTwo_Class("2", "11", "밥은 잘 드시고 계신가요?", "step2_1_audio.mp3", filepath + "/step2_1_record"));
             item.add(new StepOneTwo_Class("2", "12", "혹시 알레르기가 있나요?", "step2_2_audio.mp3", filepath + "/step2_2_record"));
             item.add(new StepOneTwo_Class("2", "13", "가족과 함께 생활하시나요?", "step2_3_audio.mp3", filepath + "/step2_3_record"));
@@ -80,7 +73,7 @@ public class StepTwoActivity extends AppCompatActivity implements View.OnClickLi
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_toolbar, menu);
-        menu.getItem(0).setVisible(false); //
+        menu.getItem(0).setVisible(false);
         return true;
     }
 
@@ -93,8 +86,17 @@ public class StepTwoActivity extends AppCompatActivity implements View.OnClickLi
             View dialogView = inflater.inflate(R.layout.layout_exit, null);
             builder.setView(dialogView);
 
+            LanguageSet languageSet = new LanguageSet();
+            String language = languageSet.getLanguage(this);
+
+            TextView close = dialogView.findViewById(R.id.close);
             Button btnCancel = dialogView.findViewById(R.id.btnCancel);
             Button btnExit = dialogView.findViewById(R.id.btnExit);
+
+            close.setText(languageSet.getStringLocal(this, R.string.close, language));
+            btnCancel.setText(languageSet.getStringLocal(this, R.string.cancel, language));
+            btnExit.setText(languageSet.getStringLocal(this, R.string.exit, language));
+
 
             final AlertDialog dialog = builder.create();
             btnCancel.setOnClickListener(new View.OnClickListener() {
